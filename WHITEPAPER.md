@@ -1,0 +1,3 @@
+# QTrust Wallet Whitepaper v1.0
+...
+(white paper modifying)

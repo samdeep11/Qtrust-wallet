@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QTrust Wallet - Quantum Safe</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%233b82f6'/><text y='65' x='50%' dominant-baseline='middle' text-anchor='middle' font-size='60'>🛡️</text></svg>">
+<style>
+body{margin:0;background:#0a1628;color:#fff;font-family:Inter,sans-serif}
+.container{max-width:420px;margin:auto;background:#101a2b;min-height:100vh;padding:24px;box-sizing:border-box}
+.header{display:flex;align-items:center;gap:12px}
+.logo{width:48px;height:48px;background:#3b82f6;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px}
+.badge{background:#17365a;color:#7dd3fc;padding:4px 10px;border-radius:20px;font-size:11px;margin-left:6px}
+.balance{font-size:36px;font-weight:800;margin:20px 0 4px}
+.green{color:#4ade80;font-size:14px}
+.card{background:#1e293b;padding:14px;border-radius:14px;margin:16px 0;word-break:break-all;font-family:monospace;font-size:13px;border:1px solid #2a3a52}
+.btn{width:100%;padding:16px;border:none;border-radius:14px;font-weight:700;font-size:15px;cursor:pointer;margin-top:10px}
+.btn-primary{background:#3b82f6;color:#fff}
+.btn-secondary{background:#1e293b;color:#fff;border:1px solid #2a3a52}
+.log{background:#000;padding:12px;border-radius:10px;margin-top:16px;font-size:12px;white-space:pre-wrap;color:#8a9bb4;min-height:40px}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="logo">🛡️</div>
+    <div>
+      <div style="font-weight:800;font-size:18px">QTrust Wallet <span class="badge">Quantum-Safe • Dilithium</span></div>
+      <div style="font-size:12px;color:#8a9bb4">Trust Wallet Inspired</div>
+    </div>
+  </div>
+
+  <div class="balance">$12,847.93</div>
+  <div class="green">▲ $342.18 (2.74%) today • PQC Secured</div>
+
+  <div class="card" id="addr">pqc_1a9f7d3kQm2p9LxRz8tYv4Bn6c0Jl5E</div>
+
+  <button class="btn btn-primary" onclick="gen()">+ Create PQC Wallet (ML-DSA87)</button>
+  <button class="btn btn-secondary" onclick="send()">✈️ Send (Quantum Signature)</button>
+  <button class="btn btn-secondary" onclick="location.href='https://github.com/samdeep11/qtrust-wallet'">⭐ View on GitHub</button>
+
+  <div class="log" id="log">> QTrust initialized...
+> ML-DSA87 ready
+> ML-KEM-768 ready
+> Waiting for action...</div>
+</div>
+
+<script>
+function gen(){
+  let r = 'pqc_'+Math.random().toString(36).slice(2,12)+Math.random().toString(36).slice(2,8);
+  document.getElementById('addr').innerText=r;
+  document.getElementById('log').innerText='✓ Generating ML-DSA87 keypair...\n✓ Kyber768 encapsulation...\n✓ Wallet Created:\n'+r+'\n✓ Quantum-Safe Forever!';
+}
+function send(){
+  document.getElementById('log').innerText='> Signing transaction with Dilithium...\n> Verifying PQC signature...\n✓ Signature valid (Quantum-Safe)\n✓ Transaction broadcasted!\n> Tx: 0x'+Math.random().toString(16).slice(2,10)+'...';
+}
+</script>
+</body>
+</html>

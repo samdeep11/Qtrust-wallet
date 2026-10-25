@@ -1,0 +1,9 @@
+{
+  "name": "QTrust Wallet",
+  "short_name": "QTrust",
+  "description": "Quantum-Safe Crypto Wallet",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a1628",
+  "theme_color": "#3b82f6"
+}

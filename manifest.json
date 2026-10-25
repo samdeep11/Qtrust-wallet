@@ -1,0 +1,16 @@
+{
+  "name": "QTrust Wallet",
+  "short_name": "QTrust",
+  "description": "Quantum-Safe Crypto Wallet - ML-DSA87",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0a1628",
+  "theme_color": "#3375ff",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3064/3064197.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

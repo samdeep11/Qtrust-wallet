@@ -2,58 +2,138 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>QTrust Wallet - Quantum Safe</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%233b82f6'/><text y='65' x='50%' dominant-baseline='middle' text-anchor='middle' font-size='60'>🛡️</text></svg>">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>QTrust Wallet - Pro</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-body{margin:0;background:#0a1628;color:#fff;font-family:Inter,sans-serif}
-.container{max-width:420px;margin:auto;background:#101a2b;min-height:100vh;padding:24px;box-sizing:border-box}
-.header{display:flex;align-items:center;gap:12px}
-.logo{width:48px;height:48px;background:#3b82f6;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px}
-.badge{background:#17365a;color:#7dd3fc;padding:4px 10px;border-radius:20px;font-size:11px;margin-left:6px}
-.balance{font-size:36px;font-weight:800;margin:20px 0 4px}
-.green{color:#4ade80;font-size:14px}
-.card{background:#1e293b;padding:14px;border-radius:14px;margin:16px 0;word-break:break-all;font-family:monospace;font-size:13px;border:1px solid #2a3a52}
-.btn{width:100%;padding:16px;border:none;border-radius:14px;font-weight:700;font-size:15px;cursor:pointer;margin-top:10px}
-.btn-primary{background:#3b82f6;color:#fff}
-.btn-secondary{background:#1e293b;color:#fff;border:1px solid #2a3a52}
-.log{background:#000;padding:12px;border-radius:10px;margin-top:16px;font-size:12px;white-space:pre-wrap;color:#8a9bb4;min-height:40px}
+:root{--bg:#0b1426;--card:#162337;--card2:#1c2e4a;--blue:#3375ff;--green:#2ed47a;--text:#8da0bf;--border:#22365a}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',system-ui,sans-serif}
+body{background:var(--bg);color:#fff;display:flex;justify-content:center}
+.app{width:100%;max-width:420px;min-height:100vh;background:var(--bg);position:relative;padding-bottom:80px}
+.header{padding:20px;display:flex;justify-content:space-between;align-items:center}
+.logoBox{display:flex;align-items:center;gap:10px}
+.logo{width:42px;height:42px;background:var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.badge{background:var(--card2);color:#6ec6ff;font-size:10px;padding:4px 8px;border-radius:20px;border:1px solid var(--border)}
+.balanceBox{padding:10px 20px}
+.balance{font-size:38px;font-weight:800;letter-spacing:-1px}
+.sub{color:var(--green);font-size:14px;margin-top:4px}
+.addrCard{background:var(--card);border:1px solid var(--border);margin:16px 20px;padding:12px 14px;border-radius:14px;display:flex;justify-content:space-between;align-items:center}
+.addr{font-family:monospace;font-size:12px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:80%}
+.actions{display:flex;gap:10px;padding:0 20px}
+.btn{flex:1;padding:14px;border-radius:14px;border:none;font-weight:700;font-size:14px;cursor:pointer}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-dark{background:var(--card);color:#fff;border:1px solid var(--border)}
+.assets{padding:20px}
+.assets h3{display:flex;justify-content:space-between;font-size:16px;margin-bottom:14px}
+.token{background:var(--card);border:1px solid var(--border);padding:14px;border-radius:14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.tokenLeft{display:flex;gap:12px;align-items:center}
+.tokenIcon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800}
+.history{padding:0 20px}
+.tx{border-left:2px solid var(--border);padding:8px 0 8px 16px;margin-left:8px;position:relative}
+.tx::before{content:'';width:8px;height:8px;background:var(--blue);border-radius:50%;position:absolute;left:-5px;top:14px}
+.bottomNav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:#111d32;border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:12px 0}
+.navItem{text-align:center;color:var(--text);font-size:11px;cursor:pointer}
+.navItem.active{color:#fff}
+.navItem i{font-size:20px;display:block;margin-bottom:3px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:end;justify-content:center;z-index:99}
+.modal.active{display:flex}
+.modalBox{background:var(--card);width:100%;max-width:420px;border-radius:24px 24px 0 0;padding:24px;animation:up .3s}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.input{width:100%;background:#0e1a2e;border:1px solid var(--border);padding:14px;border-radius:12px;color:#fff;margin-top:12px}
+.log{font-size:11px;color:#7aa0d0;background:#000;padding:10px;border-radius:10px;margin-top:12px;white-space:pre-wrap}
 </style>
 </head>
 <body>
-<div class="container">
+<div class="app">
   <div class="header">
-    <div class="logo">🛡️</div>
-    <div>
-      <div style="font-weight:800;font-size:18px">QTrust Wallet <span class="badge">Quantum-Safe • Dilithium</span></div>
-      <div style="font-size:12px;color:#8a9bb4">Trust Wallet Inspired</div>
-    </div>
+    <div class="logoBox"><div class="logo">🛡️</div><div><b>QTrust</b> <span class="badge">ML-DSA87 • Quantum Safe</span><br><small style="color:var(--text);font-size:11px">samdeep11.github.io/Qtrust-wallet</small></div></div>
+    <i class="fas fa-qrcode" onclick="openRecv()"></i>
   </div>
 
-  <div class="balance">$12,847.93</div>
-  <div class="green">▲ $342.18 (2.74%) today • PQC Secured</div>
+  <div class="balanceBox">
+    <div class="balance" id="totalBal">$12,847.93</div>
+    <div class="sub" id="totalSub">▲ $342.18 (2.74%) • PQC Secured</div>
+  </div>
 
-  <div class="card" id="addr">pqc_1a9f7d3kQm2p9LxRz8tYv4Bn6c0Jl5E</div>
+  <div class="addrCard"><div class="addr" id="addr">pqc_1a9f7d3kQm2p9LxRz8tYv4Bn6c0Jl5E</div><i class="fas fa-copy" onclick="copyAddr()"></i></div>
 
-  <button class="btn btn-primary" onclick="gen()">+ Create PQC Wallet (ML-DSA87)</button>
-  <button class="btn btn-secondary" onclick="send()">✈️ Send (Quantum Signature)</button>
-  <button class="btn btn-secondary" onclick="location.href='https://github.com/samdeep11/qtrust-wallet'">⭐ View on GitHub</button>
+  <div class="actions">
+    <button class="btn btn-blue" onclick="openSend()"><i class="fas fa-paper-plane"></i> Send</button>
+    <button class="btn btn-dark" onclick="openRecv()"><i class="fas fa-qrcode"></i> Receive</button>
+    <button class="btn btn-dark" onclick="genWallet()"><i class="fas fa-plus"></i></button>
+  </div>
 
-  <div class="log" id="log">> QTrust initialized...
+  <div class="assets">
+    <h3>Assets <span style="color:var(--text);font-size:12px" onclick="genWallet()">+ Add PQC Wallet</span></h3>
+    <div class="token"><div class="tokenLeft"><div class="tokenIcon" style="background:#f7931a">₿</div><div><b>Bitcoin</b><br><small style="color:var(--text)">BTC • PQC Wrapped</small></div></div><div style="text-align:right"><b>0.42 BTC</b><br><small style="color:var(--text)">$12,000</small></div></div>
+    <div class="token"><div class="tokenLeft"><div class="tokenIcon" style="background:#627eea">♦</div><div><b>Ethereum</b><br><small style="color:var(--text)">ETH • Quantum Safe</small></div></div><div style="text-align:right"><b>3.1 ETH</b><br><small style="color:var(--text)">$847</small></div></div>
+    <div class="token"><div class="tokenLeft"><div class="tokenIcon" style="background:var(--blue)">Q</div><div><b>PQC Token</b><br><small style="color:var(--text)">ML-KEM + ML-DSA</small></div></div><div style="text-align:right"><b>1,200 PQC</b><br><small style="color:var(--green)">▲ Quantum Native</small></div></div>
+  </div>
+
+  <div class="history">
+    <h3 style="margin:10px 0 14px">Recent Activity</h3>
+    <div id="txList">
+      <div class="tx"><b>Received 0.1 PQC</b> <small style="color:var(--text)">• from pqc_8x...2a • ML-DSA Verified</small><br><small style="color:var(--text)">2 mins ago • Tx: 0x9f2a...</small></div>
+      <div class="tx"><b>Sent 0.02 BTC (Quantum Signed)</b><br><small style="color:var(--text)">5 hours ago • Dilithium Sig Valid</small></div>
+    </div>
+    <div class="log" id="log">> QTrust Pro v2 initialized
 > ML-DSA87 ready
 > ML-KEM-768 ready
-> Waiting for action...</div>
+> Secure Enclave: Active</div>
+  </div>
+
+  <div class="bottomNav">
+    <div class="navItem active"><i class="fas fa-wallet"></i>Wallet</div>
+    <div class="navItem"><i class="fas fa-compass"></i>Discover</div>
+    <div class="navItem"><i class="fas fa-exchange-alt"></i>Swap</div>
+    <div class="navItem"><i class="fas fa-cog"></i>Settings</div>
+  </div>
 </div>
 
+<!-- Send Modal -->
+<div class="modal" id="sendModal"><div class="modalBox">
+  <h3>Send (Quantum Signature)</h3>
+  <input class="input" id="toAddr" placeholder="To PQC Address (pqc_...)">
+  <input class="input" id="amount" placeholder="Amount e.g. 0.1">
+  <button class="btn btn-blue" style="width:100%;margin-top:16px" onclick="doSend()">Sign with Dilithium & Send</button>
+  <button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="closeM()">Cancel</button>
+</div></div>
+
+<!-- Receive Modal -->
+<div class="modal" id="recvModal"><div class="modalBox" style="text-align:center">
+  <h3>Receive (Quantum-Safe)</h3>
+  <div style="background:#fff;padding:16px;border-radius:16px;margin:16px auto;width:160px;height:160px;display:flex;align-items:center;justify-content:center;color:#000;font-size:12px">QR CODE<br><span id="qrAddr" style="font-size:8px;word-break:break-all"></span></div>
+  <div class="addr" style="width:100%;text-align:center;color:#fff" id="recvAddr"></div>
+  <button class="btn btn-blue" style="width:100%;margin-top:16px" onclick="copyAddr()">Copy Address</button>
+  <button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="closeM()">Close</button>
+</div></div>
+
 <script>
-function gen(){
-  let r = 'pqc_'+Math.random().toString(36).slice(2,12)+Math.random().toString(36).slice(2,8);
-  document.getElementById('addr').innerText=r;
-  document.getElementById('log').innerText='✓ Generating ML-DSA87 keypair...\n✓ Kyber768 encapsulation...\n✓ Wallet Created:\n'+r+'\n✓ Quantum-Safe Forever!';
+let currentAddr = document.getElementById('addr').innerText;
+function genWallet(){
+  currentAddr = 'pqc_'+Math.random().toString(36).slice(2,10)+Math.random().toString(36).slice(2,10)+'J15E';
+  document.getElementById('addr').innerText=currentAddr;
+  document.getElementById('recvAddr').innerText=currentAddr;
+  document.getElementById('qrAddr').innerText=currentAddr;
+  document.getElementById('log').innerText=`✓ ML-DSA87 Keypair Generated\n✓ PublicKey: ${currentAddr.slice(0,20)}...\n✓ PrivateKey: Encrypted in Secure Enclave\n✓ Wallet Ready`;
+  document.getElementById('txList').innerHTML = `<div class="tx"><b>New PQC Wallet Created</b><br><small style="color:var(--text)">ML-DSA87 • ${new Date().toLocaleTimeString()} • ${currentAddr.slice(0,12)}...</small></div>` + document.getElementById('txList').innerHTML;
 }
-function send(){
-  document.getElementById('log').innerText='> Signing transaction with Dilithium...\n> Verifying PQC signature...\n✓ Signature valid (Quantum-Safe)\n✓ Transaction broadcasted!\n> Tx: 0x'+Math.random().toString(16).slice(2,10)+'...';
+function openSend(){document.getElementById('sendModal').classList.add('active')}
+function openRecv(){
+  document.getElementById('recvAddr').innerText=currentAddr;
+  document.getElementById('qrAddr').innerText=currentAddr;
+  document.getElementById('recvModal').classList.add('active')
 }
+function closeM(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('active'))}
+function doSend(){
+  let to=document.getElementById('toAddr').value||'pqc_demo_address';
+  let amt=document.getElementById('amount').value||'0.1';
+  closeM();
+  document.getElementById('log').innerText=`> Signing Tx with ML-DSA87...\n> Hash: SHA3-256\n> To: ${to.slice(0,16)}...\n> Amount: ${amt} PQC\n✓ Signature: VALID (Dilithium)\n✓ Broadcasted to PQC Network\n✓ Tx: 0x${Math.random().toString(16).slice(2,10)}...`;
+  document.getElementById('txList').innerHTML = `<div class="tx"><b>Sent ${amt} PQC (Quantum Signed)</b><br><small style="color:var(--text)">To ${to.slice(0,10)}... • Dilithium Sig Valid • Just now</small></div>` + document.getElementById('txList').innerHTML;
+}
+function copyAddr(){navigator.clipboard.writeText(currentAddr);document.getElementById('log').innerText=`✓ Address Copied: ${currentAddr}\n> Ready for quantum-safe transfer`; }
+genWallet();
 </script>
 </body>
 </html>

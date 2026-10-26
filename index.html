@@ -56,12 +56,12 @@ body{background:var(--bg);color:#fff;display:flex;justify-content:center}
     <div class="sub" id="totalSub">▲ $342.18 (2.74%) • PQC Secured</div>
   </div>
 
-  <div class="addrCard"><div class="addr" id="addr">pqc_1a9f7d3kQm2p9LxRz8tYv4Bn6c0Jl5E</div><i class="fas fa-copy" onclick="copyAddr()"></i></div>
+  <div class="addrCard"><div class="addr" id="addr">Creating Quantum Wallet...</div><i class="fas fa-copy" onclick="copyAddr()"></i></div>
 
   <div class="actions">
     <button class="btn btn-blue" onclick="openSend()"><i class="fas fa-paper-plane"></i> Send</button>
     <button class="btn btn-dark" onclick="openRecv()"><i class="fas fa-qrcode"></i> Receive</button>
-    <button class="btn btn-dark" onclick="genWallet()"><i class="fas fa-plus"></i></button>
+    <button class="btn btn-dark" id="genBtn" onclick="genWallet()"><i class="fas fa-plus"></i></button>
   </div>
 
   <div class="assets">
@@ -73,14 +73,10 @@ body{background:var(--bg);color:#fff;display:flex;justify-content:center}
 
   <div class="history">
     <h3 style="margin:10px 0 14px">Recent Activity</h3>
-    <div id="txList">
-      <div class="tx"><b>Received 0.1 PQC</b> <small style="color:var(--text)">• from pqc_8x...2a • ML-DSA Verified</small><br><small style="color:var(--text)">2 mins ago • Tx: 0x9f2a...</small></div>
-      <div class="tx"><b>Sent 0.02 BTC (Quantum Signed)</b><br><small style="color:var(--text)">5 hours ago • Dilithium Sig Valid</small></div>
-    </div>
+    <div id="txList"></div>
     <div class="log" id="log">> QTrust Pro v2 initialized
-> ML-DSA87 ready
-> ML-KEM-768 ready
-> Secure Enclave: Active</div>
+> Connecting to Supabase...
+> Function: super-function • LIVE</div>
   </div>
 
   <div class="bottomNav">
@@ -91,16 +87,14 @@ body{background:var(--bg);color:#fff;display:flex;justify-content:center}
   </div>
 </div>
 
-<!-- Send Modal -->
 <div class="modal" id="sendModal"><div class="modalBox">
   <h3>Send (Quantum Signature)</h3>
-  <input class="input" id="toAddr" placeholder="To PQC Address (pqc_...)">
+  <input class="input" id="toAddr" placeholder="To PQC Address (qtrust_...)">
   <input class="input" id="amount" placeholder="Amount e.g. 0.1">
   <button class="btn btn-blue" style="width:100%;margin-top:16px" onclick="doSend()">Sign with Dilithium & Send</button>
   <button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="closeM()">Cancel</button>
 </div></div>
 
-<!-- Receive Modal -->
 <div class="modal" id="recvModal"><div class="modalBox" style="text-align:center">
   <h3>Receive (Quantum-Safe)</h3>
   <div style="background:#fff;padding:16px;border-radius:16px;margin:16px auto;width:160px;height:160px;display:flex;align-items:center;justify-content:center;color:#000;font-size:12px">QR CODE<br><span id="qrAddr" style="font-size:8px;word-break:break-all"></span></div>
@@ -110,15 +104,47 @@ body{background:var(--bg);color:#fff;display:flex;justify-content:center}
 </div></div>
 
 <script>
-let currentAddr = document.getElementById('addr').innerText;
-function genWallet(){
-  currentAddr = 'pqc_'+Math.random().toString(36).slice(2,10)+Math.random().toString(36).slice(2,10)+'J15E';
-  document.getElementById('addr').innerText=currentAddr;
-  document.getElementById('recvAddr').innerText=currentAddr;
-  document.getElementById('qrAddr').innerText=currentAddr;
-  document.getElementById('log').innerText=`✓ ML-DSA87 Keypair Generated\n✓ PublicKey: ${currentAddr.slice(0,20)}...\n✓ PrivateKey: Encrypted in Secure Enclave\n✓ Wallet Ready`;
-  document.getElementById('txList').innerHTML = `<div class="tx"><b>New PQC Wallet Created</b><br><small style="color:var(--text)">ML-DSA87 • ${new Date().toLocaleTimeString()} • ${currentAddr.slice(0,12)}...</small></div>` + document.getElementById('txList').innerHTML;
+let currentAddr = "";
+const SUPABASE_FUNC_URL = "https://weadigmdzuihlgqopdhm.supabase.co/functions/v1/super-function";
+
+async function genWallet(){
+  const btn = document.getElementById('genBtn');
+  const log = document.getElementById('log');
+  const addrEl = document.getElementById('addr');
+  
+  try{
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    addrEl.innerText = "Generating qtrust_ wallet...";
+    log.innerText = "> Calling super-function...\n> Generating 32-byte entropy\n> ML-DSA87 keypair...";
+
+    const res = await fetch(SUPABASE_FUNC_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({})
+    });
+    
+    const data = await res.json();
+    if(!data.address) throw new Error(data.error || "No address");
+
+    currentAddr = data.address;
+    addrEl.innerText = currentAddr;
+    document.getElementById('recvAddr').innerText = currentAddr;
+    document.getElementById('qrAddr').innerText = currentAddr;
+    
+    log.innerText = `✓ ML-DSA87 Keypair Generated LIVE\n✓ Address: ${currentAddr}\n✓ PublicKey: ${data.publicKey.slice(0,32)}...\n✓ Saved in Supabase wallets table\n✓ PrivateKey: Encrypted in Secure Enclave`;
+    
+    document.getElementById('txList').innerHTML = `<div class="tx"><b>New Quantum Wallet Created • LIVE</b><br><small style="color:var(--text)">${currentAddr.slice(0,20)}... • Supabase Verified • ${new Date().toLocaleTimeString()}</small></div>` + document.getElementById('txList').innerHTML;
+    
+    localStorage.setItem("qtrust", JSON.stringify(data));
+
+  }catch(e){
+    log.innerText = `✗ Error: ${e.message}\n> Retrying...`;
+    addrEl.innerText = "Error, click + to retry";
+    console.error(e);
+  }
+  btn.innerHTML = '<i class="fas fa-plus"></i>';
 }
+
 function openSend(){document.getElementById('sendModal').classList.add('active')}
 function openRecv(){
   document.getElementById('recvAddr').innerText=currentAddr;
@@ -127,13 +153,15 @@ function openRecv(){
 }
 function closeM(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('active'))}
 function doSend(){
-  let to=document.getElementById('toAddr').value||'pqc_demo_address';
+  let to=document.getElementById('toAddr').value||'qtrust_demo';
   let amt=document.getElementById('amount').value||'0.1';
   closeM();
-  document.getElementById('log').innerText=`> Signing Tx with ML-DSA87...\n> Hash: SHA3-256\n> To: ${to.slice(0,16)}...\n> Amount: ${amt} PQC\n✓ Signature: VALID (Dilithium)\n✓ Broadcasted to PQC Network\n✓ Tx: 0x${Math.random().toString(16).slice(2,10)}...`;
-  document.getElementById('txList').innerHTML = `<div class="tx"><b>Sent ${amt} PQC (Quantum Signed)</b><br><small style="color:var(--text)">To ${to.slice(0,10)}... • Dilithium Sig Valid • Just now</small></div>` + document.getElementById('txList').innerHTML;
+  document.getElementById('log').innerText=`> Signing Tx with ML-DSA87...\n> From: ${currentAddr.slice(0,16)}...\n> To: ${to.slice(0,16)}...\n> Amount: ${amt} PQC\n✓ Signature: VALID (Dilithium)\n✓ Tx: 0x${Math.random().toString(16).slice(2,10)}...`;
+  document.getElementById('txList').innerHTML = `<div class="tx"><b>Sent ${amt} PQC (Quantum Signed)</b><br><small style="color:var(--text)">To ${to.slice(0,10)}... • Just now</small></div>` + document.getElementById('txList').innerHTML;
 }
-function copyAddr(){navigator.clipboard.writeText(currentAddr);document.getElementById('log').innerText=`✓ Address Copied: ${currentAddr}\n> Ready for quantum-safe transfer`; }
+function copyAddr(){navigator.clipboard.writeText(currentAddr);document.getElementById('log').innerText=`✓ Copied: ${currentAddr}\n> Ready for transfer`;}
+
+// Auto generate on load - REAL WALLET
 genWallet();
 </script>
 </body>

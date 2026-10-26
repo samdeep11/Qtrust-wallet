@@ -1,37 +1,466 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>QTrust PRO</title><link rel="manifest" href="manifest.json"><script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script><script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"><style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}body{background:#0b1426;color:#fff;display:flex;justify-content:center;transition:.3s}.app{width:100%;max-width:430px;min-height:100vh;background:var(--bg);padding-bottom:90px;position:relative}:root{--bg:#0b1426;--card:#162337;--b:#22365a;--t:#8da0bf}body.light{--bg:#f6f8fc;--card:#fff;--b:#e3e8f0;--t:#6b7a99}body.light{color:#0b1426}.top{padding:20px;display:flex;justify-content:space-between;align-items:center}.logo{width:48px;height:48px;background:#1a2b4a;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;border:1px solid var(--b)}.green{color:#2ed47a;font-size:13px}.addr{margin:14px 20px;background:var(--card);border:1px solid var(--b);padding:14px 16px;border-radius:16px;display:flex;justify-content:space-between;align-items:center}.btns{display:flex;gap:12px;padding:0 20px}.b{flex:1;padding:16px;border-radius:16px;border:none;font-weight:700;font-size:14px;cursor:pointer}.blue{background:#3375ff;color:#fff}.dark{background:var(--card);color:inherit;border:1px solid var(--b)}.head{padding:20px 20px 8px;display:flex;justify-content:space-between}.card{background:var(--card);border:1px solid var(--b);margin:10px 20px;padding:18px;border-radius:18px;display:flex;justify-content:space-between;align-items:center}.ico{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;color:#fff}.btc{background:#f7931a}.eth{background:#627eea}.q{background:#3375ff}.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--card);border-top:1px solid var(--b);display:flex;justify-content:space-around;padding:12px 0;z-index:10}.nv{color:var(--t);text-align:center;font-size:11px;cursor:pointer}.nv.on{color:#3375ff}.modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:end;justify-content:center;z-index:99}.modal.on{display:flex}.box{background:var(--card);width:100%;max-width:430px;border-radius:24px 24px 0 0;padding:24px;max-height:90vh;overflow:auto}.inp{width:100%;background:var(--bg);border:1px solid var(--b);padding:16px;border-radius:14px;color:inherit;margin-top:12px}.lock{position:fixed;inset:0;background:#0b1426;z-index:999;display:flex;align-items:center;justify-content:center;flex-direction:column}.page{display:none;padding:0 0 20px}.page.on{display:block}
-</style></head><body>
-<div class="lock" id="lock"><div style="font-size:60px">🛡️</div><h2 style="margin:16px 0">QTrust PRO</h2><p style="color:#8da0bf">Enter PIN 1234</p><input id="pin" type="password" class="inp" style="width:200px;text-align:center" placeholder="••••"><button class="b blue" style="width:200px;margin-top:12px" onclick="unlock()">Unlock <i class="fas fa-fingerprint"></i></button></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>QTrust PRO | Web3 Wallet</title>
+  
+  <!-- CDNs: Ethers, QR Tools, FontAwesome, Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0a0f1d;
+      --card: #131c31;
+      --card-hover: #1a2744;
+      --border: #202f52;
+      --text-main: #ffffff;
+      --text-sub: #7e91b5;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+    body.light {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --card-hover: #f1f5f9;
+      --border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-sub: #64748b;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans',sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg); color: var(--text-main); display:flex; justify-content:center; min-height:100vh; }
+    
+    .app { width:100%; max-width:440px; min-height:100vh; background:var(--bg); padding-bottom:90px; position:relative; overflow-x:hidden; }
+
+    /* Top Bar */
+    .top-bar { padding: 18px 20px; display:flex; justify-content:space-between; align-items:center; }
+    .network-badge { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; box-shadow: 0 0 8px var(--success); }
+
+    /* Address Pill */
+    .address-pill { margin: 0 20px 16px; background: var(--card); border: 1px solid var(--border); padding: 8px 14px; border-radius: 30px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-family: monospace; cursor: pointer; }
+    .address-pill:hover { background: var(--card-hover); }
+
+    /* Hero Balance Card */
+    .hero-card { margin: 0 20px 20px; background: linear-gradient(145deg, #182647 0%, #101930 100%); border: 1px solid var(--border); border-radius: 24px; padding: 24px 20px; text-align: center; }
+    body.light .hero-card { background: linear-gradient(145deg, #ffffff 0%, #edf2f7 100%); }
+    .balance-sub { color: var(--text-sub); font-size: 13px; font-weight: 500; }
+    .balance-fiat { font-size: 34px; font-weight: 700; margin: 4px 0; }
+    .balance-crypto { font-size: 14px; color: var(--primary); font-weight: 600; }
+
+    /* Action Buttons Row */
+    .action-row { display:flex; justify-content:space-around; padding: 0 10px; margin-bottom: 24px; }
+    .action-btn { display:flex; flex-direction:column; align-items:center; gap: 8px; cursor: pointer; background: transparent; border:none; color:inherit; }
+    .btn-circle { width: 52px; height: 52px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size: 18px; color: var(--primary); transition: 0.2s; }
+    .action-btn:hover .btn-circle { transform: translateY(-2px); background: var(--primary); color: #fff; }
+    .action-label { font-size: 12px; font-weight: 600; }
+
+    /* Assets & List */
+    .section-header { padding: 0 20px 12px; display:flex; justify-content:space-between; align-items:center; font-size: 14px; font-weight: 600; }
+    .asset-item { margin: 0 20px 10px; background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 16px; display:flex; justify-content:space-between; align-items:center; cursor: pointer; }
+    .asset-item:hover { background: var(--card-hover); }
+    .asset-ico { width: 44px; height: 44px; border-radius: 50%; background: #627eea; color: #fff; display:flex; align-items:center; justify-content:center; font-size: 20px; }
+
+    /* Activity Feed */
+    .tx-item { margin: 8px 20px; padding: 12px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; display:flex; justify-content:space-between; align-items:center; }
+
+    /* Bottom Navbar */
+    .bottom-bar { position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:440px; background:var(--card); border-top:1px solid var(--border); display:flex; justify-content:space-around; padding:12px 0; z-index:10; }
+    .tab-btn { color:var(--text-sub); text-align:center; font-size:11px; cursor:pointer; background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:4px; }
+    .tab-btn.active { color: var(--primary); font-weight: 600; }
+
+    /* Modals */
+    .modal { position:fixed; inset:0; background:rgba(0,0,0,.7); backdrop-filter: blur(4px); display:none; align-items:flex-end; justify-content:center; z-index:99; }
+    .modal.on { display:flex; }
+    .sheet { background:var(--card); width:100%; max-width:440px; border-radius:28px 28px 0 0; padding:24px; border-top:1px solid var(--border); animation: slideUp .25s ease-out; }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+    .input-box { width:100%; background:var(--bg); border:1px solid var(--border); padding:16px; border-radius:14px; color:inherit; margin:10px 0; outline:none; font-size:14px; }
+    .input-box:focus { border-color: var(--primary); }
+    .input-container { position:relative; }
+    .max-pill { position:absolute; right: 12px; top: 22px; background: var(--border); padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; color: var(--primary); }
+
+    .main-btn { width:100%; padding: 16px; border-radius: 16px; background: var(--primary); color: #fff; border:none; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 10px; display:flex; align-items:center; justify-content:center; gap:8px; }
+    .main-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .sec-btn { width:100%; padding: 14px; border-radius: 16px; background: transparent; border: 1px solid var(--border); color:inherit; font-weight:600; margin-top: 8px; cursor: pointer; }
+
+    /* Toast Notification */
+    .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #1f2937; color: #fff; border: 1px solid #374151; padding: 10px 18px; border-radius: 30px; font-size: 13px; z-index: 9999; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+
+    .page { display:none; }
+    .page.on { display:block; }
+  </style>
+</head>
+<body>
+
+<div class="toast" id="toast">Copied to clipboard!</div>
 
 <div class="app">
-<div class="top"><div style="display:flex;gap:12px;align-items:center"><div class="logo">🛡️</div><div><b>QTrust PRO</b> <span class="green" style="margin-left:8px">LIVE</span></div></div><div><i class="fas fa-qrcode" onclick="openR()" style="margin-right:16px"></i><i class="fas fa-key" onclick="openSeed()"></i></div></div>
+  <!-- Top Navigation & Network -->
+  <div class="top-bar">
+    <div class="network-badge" onclick="switchNetworkPrompt()">
+      <span class="dot"></span>
+      <span id="currentNetworkName">Sepolia ETH</span>
+      <i class="fas fa-chevron-down" style="font-size:10px;color:var(--text-sub)"></i>
+    </div>
+    <div style="display:flex;gap:14px;font-size:16px">
+      <i class="fas fa-moon" onclick="toggleTheme()" style="cursor:pointer" title="Dark/Light"></i>
+      <i class="fas fa-key" onclick="openSeedModal()" style="cursor:pointer" title="View Keys"></i>
+    </div>
+  </div>
 
-<div class="page on" id="p-wallet">
-<div class="green" style="padding:0 20px" id="liveP">▲ Loading live prices... • PQC Secured</div>
-<div class="addr"><div id="a" style="font-family:monospace;font-size:12px;width:85%;overflow:hidden;white-space:nowrap"></div><i class="fas fa-copy" onclick="copy()"></i></div>
-<div class="btns"><button class="b blue" onclick="openS()"><i class="fas fa-paper-plane"></i> Send</button><button class="b dark" onclick="openR()"><i class="fas fa-qrcode"></i> Receive</button><button class="b dark" onclick="scan()"><i class="fas fa-camera"></i></button></div>
-<div class="head"><h3>Assets</h3><small onclick="gen()" style="color:#3375ff;cursor:pointer">+ New Wallet</small></div>
-<div id="assets"></div>
-<div class="head"><h3>Recent Activity</h3><small onclick="clearTx()" style="color:#8da0bf">Clear</small></div>
-<div id="tx" style="margin:0 20px;border-left:2px solid #22365a;padding-left:16px"></div>
+  <div class="page on" id="page-home">
+    <!-- User Address Badge -->
+    <div style="text-align: center;">
+      <div class="address-pill" onclick="copyAddress()">
+        <i class="fas fa-shield-alt" style="color:var(--primary)"></i>
+        <span id="accountDisplay">Connecting...</span>
+        <i class="fas fa-copy" style="color:var(--text-sub);font-size:11px"></i>
+      </div>
+    </div>
+
+    <!-- Hero Balance Section -->
+    <div class="hero-card">
+      <p class="balance-sub">Total Portfolio</p>
+      <div class="balance-fiat" id="fiatTotal">$0.00</div>
+      <div class="balance-crypto" id="cryptoTotal">0.0000 ETH</div>
+    </div>
+
+    <!-- Main Action Buttons Row -->
+    <div class="action-row">
+      <button class="action-btn" onclick="openSendModal()">
+        <div class="btn-circle"><i class="fas fa-arrow-up"></i></div>
+        <span class="action-label">Send</span>
+      </button>
+      <button class="action-btn" onclick="openReceiveModal()">
+        <div class="btn-circle"><i class="fas fa-arrow-down"></i></div>
+        <span class="action-label">Receive</span>
+      </button>
+      <button class="action-btn" onclick="openFaucet()">
+        <div class="btn-circle"><i class="fas fa-gas-pump"></i></div>
+        <span class="action-label">Faucet</span>
+      </button>
+      <button class="action-btn" onclick="refreshData()">
+        <div class="btn-circle" id="refreshIcon"><i class="fas fa-sync-alt"></i></div>
+        <span class="action-label">Refresh</span>
+      </button>
+    </div>
+
+    <!-- Asset Overview -->
+    <div class="section-header">
+      <span>Tokens</span>
+      <span style="color:var(--text-sub);font-size:12px" onclick="createNewWalletPrompt()" style="cursor:pointer">+ Reset/New</span>
+    </div>
+    <div class="asset-item" onclick="openSendModal()">
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="asset-ico">♦</div>
+        <div>
+          <b id="assetName">Sepolia ETH</b>
+          <p style="font-size:12px;color:var(--text-sub)" id="ethPriceDisplay">$2,800.00</p>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <b id="tokenBalance">0.0000 ETH</b>
+        <p style="font-size:12px;color:var(--text-sub)" id="tokenFiatValue">$0.00</p>
+      </div>
+    </div>
+
+    <!-- Activity Section -->
+    <div class="section-header" style="margin-top:20px">
+      <span>Recent Transfers</span>
+      <span style="color:var(--text-sub);font-size:12px;cursor:pointer" onclick="clearHistory()">Clear</span>
+    </div>
+    <div id="txList"></div>
+  </div>
+
+  <!-- Settings Page -->
+  <div class="page" id="page-settings">
+    <div class="section-header" style="padding-top:20px"><span>Wallet Settings</span></div>
+    <div class="asset-item" onclick="openSeedModal()"><b>🔑 Backup Seed & Private Key</b><span>View</span></div>
+    <div class="asset-item" onclick="switchNetworkPrompt()"><b>🌐 Switch Testnet</b><span>Change</span></div>
+    <div class="asset-item" onclick="toggleTheme()"><b>🌗 Toggle Theme</b><span>Dark / Light</span></div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-bar">
+    <button class="tab-btn active" onclick="switchTab('home')"><i class="fas fa-wallet fa-lg"></i>Wallet</button>
+    <button class="tab-btn" onclick="switchTab('settings')"><i class="fas fa-cog fa-lg"></i>Settings</button>
+  </div>
 </div>
 
-<div class="page" id="p-discover"><div class="head"><h3>Discover PQC</h3></div><div id="coins"></div></div>
-<div class="page" id="p-swap"><div class="head"><h3>Swap</h3></div><div class="box" style="border-radius:18px;margin:10px 20px"><input class="inp" id="swapFrom" value="0.1"><select id="fromC" class="inp"><option>BTC</option><option>ETH</option><option>PQC</option></select><div style="text-align:center;margin:10px"><i class="fas fa-exchange-alt"></i></div><input class="inp" id="swapTo" readonly><select id="toC" class="inp"><option>PQC</option><option>BTC</option><option>ETH</option></select><button class="b blue" style="width:100%;margin-top:12px" onclick="doSwap()">Swap Now</button></div></div>
-<div class="page" id="p-settings"><div class="head"><h3>Settings</h3></div><div class="card" onclick="toggleTheme()"><b>🌗 Dark / Light</b><span>Toggle</span></div><div class="card" onclick="openSeed()"><b>🔑 Seed & Private Key</b><span>View</span></div><div class="card" onclick="lock()"><b>🔒 Lock Wallet</b><span>PIN</span></div><div class="card"><b>Version</b><span>PRO v2.0 • samdeep11</span></div></div>
-
-<div class="bottom"><div class="nv on" onclick="nav('wallet')"><i class="fas fa-wallet"></i><br>Wallet</div><div class="nv" onclick="nav('discover')"><i class="fas fa-compass"></i><br>Discover</div><div class="nv" onclick="nav('swap')"><i class="fas fa-exchange-alt"></i><br>Swap</div><div class="nv" onclick="nav('settings')"><i class="fas fa-cog"></i><br>Settings</div></div>
+<!-- Send Modal -->
+<div class="modal" id="modalSend">
+  <div class="sheet">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <h3>Send Crypto</h3>
+      <i class="fas fa-times" onclick="closeModals()" style="cursor:pointer"></i>
+    </div>
+    <div class="input-container">
+      <input class="input-box" id="sendTo" placeholder="Recipient Address (0x...)">
+      <i class="fas fa-camera" onclick="scanQR()" style="position:absolute;right:16px;top:28px;cursor:pointer;color:var(--text-sub)"></i>
+    </div>
+    <div class="input-container">
+      <input class="input-box" id="sendAmount" placeholder="Amount (ETH)" type="number" step="0.0001">
+      <span class="max-pill" onclick="setMaxBalance()">MAX</span>
+    </div>
+    <p id="txFeedback" style="font-size:12px;margin:4px 0;color:var(--primary)"></p>
+    <button class="main-btn" id="btnConfirmSend" onclick="executeSend()">
+      <span id="btnText">Confirm & Send</span>
+    </button>
+    <button class="sec-btn" onclick="closeModals()">Cancel</button>
+  </div>
 </div>
 
-<div class="modal" id="mS"><div class="box"><h3>Send</h3><input class="inp" id="to" placeholder="To address"><input class="inp" id="am" placeholder="Amount"><button class="b blue" style="width:100%;margin-top:14px" onclick="send()">Send Now</button><button class="b dark" style="width:100%;margin-top:8px" onclick="cls()">Cancel</button></div></div>
-<div class="modal" id="mR"><div class="box" style="text-align:center"><h3>Receive</h3><div id="qr" style="background:#fff;padding:10px;border-radius:16px;margin:14px auto;width:180px;height:180px;display:flex;align-items:center;justify-content:center"></div><div id="qrT" style="font-size:10px;word-break:break-all"></div><button class="b blue" style="width:100%;margin-top:12px" onclick="copy()">Copy</button><button class="b dark" style="width:100%;margin-top:8px" onclick="cls()">Close</button><div id="reader" style="margin-top:12px"></div></div></div>
-<div class="modal" id="mSeed"><div class="box"><h3>🔑 Secret Recovery</h3><p style="color:#ff6b6b;font-size:12px">Never share!</p><div id="seed" style="background:var(--bg);padding:14px;border-radius:12px;margin:12px 0;font-size:13px;line-height:22px;border:1px dashed #ff6b6b"></div><div style="font-size:11px;word-break:break-all" id="pk"></div><button class="b dark" style="width:100%;margin-top:10px" onclick="cls()">Close</button></div></div>
+<!-- Receive Modal -->
+<div class="modal" id="modalReceive">
+  <div class="sheet" style="text-align:center">
+    <h3>Deposit / Receive</h3>
+    <p style="font-size:12px;color:var(--text-sub);margin-top:4px">Scan QR or share address to receive testnet funds</p>
+    <div id="qrcodeBox" style="background:#fff;padding:12px;border-radius:18px;margin:18px auto;width:170px;height:170px;display:flex;align-items:center;justify-content:center"></div>
+    <div id="fullAddressText" style="font-size:11px;word-break:break-all;font-family:monospace;margin-bottom:14px;color:var(--text-sub)"></div>
+    <button class="main-btn" onclick="copyAddress()"><i class="fas fa-copy"></i> Copy Address</button>
+    <button class="sec-btn" onclick="closeModals()">Done</button>
+    <div id="qrScannerArea" style="margin-top:10px"></div>
+  </div>
+</div>
+
+<!-- Seed Modal -->
+<div class="modal" id="modalSeed">
+  <div class="sheet">
+    <h3>Secret Credentials</h3>
+    <p style="color:var(--danger);font-size:12px;margin-top:4px">Do not share your Seed Phrase or Private Key with anyone!</p>
+    <div style="margin:14px 0;padding:14px;background:var(--bg);border:1px dashed var(--danger);border-radius:14px">
+      <small style="color:var(--text-sub)">Mnemonic Phrase:</small>
+      <div id="seedPhraseText" style="font-size:13px;line-height:22px;margin-top:4px"></div>
+    </div>
+    <div style="padding:10px 14px;background:var(--bg);border-radius:12px;font-size:11px;font-family:monospace;word-break:break-all" id="privateKeyText"></div>
+    <button class="sec-btn" style="margin-top:14px" onclick="closeModals()">Close</button>
+  </div>
+</div>
+
 <script>
-let cur="",prices={BTC:60000,ETH:3000,PQC:4.5},txs=JSON.parse(localStorage.getItem('qtx')||'[]');
-function gen(){let r=crypto.getRandomValues(new Uint8Array(24));let h=Array.from(r).map(b=>b.toString(16).padStart(2,'0')).join('');cur=`qtrust_${h.slice(0,20)}Qm${h.slice(20,36)}`;let words=["abandon","quantum","shield","trust","bitcoin","wallet","secure","future","chain","safe","crypto","light"];localStorage.setItem('qtrust_pro',cur);localStorage.setItem('qseed',words.join(' '));localStorage.setItem('qpk','0x'+h);render();addTx('New Wallet Created',cur)}
-function render(){document.getElementById('a').innerText=cur;document.getElementById('qrT').innerText=cur;document.getElementById('qr').innerHTML="";new QRCode(document.getElementById('qr'),{text:cur,width:160,height:160});let b=(0.42*prices.BTC).toFixed(0),e=(3.1*prices.ETH).toFixed(0);document.getElementById('assets').innerHTML=`<div class="card"><div style="display:flex;gap:14px;align-items:center"><div class="ico btc">₿</div><div><b>Bitcoin</b><br><small style="color:var(--t)">BTC • $${prices.BTC.toLocaleString()}</small></div></div><div style="text-align:right"><b>0.42 BTC</b><br><small>$${b}</small></div></div><div class="card"><div style="display:flex;gap:14px;align-items:center"><div class="ico eth">♦</div><div><b>Ethereum</b><br><small style="color:var(--t)">ETH • $${prices.ETH}</small></div></div><div style="text-align:right"><b>3.1 ETH</b><br><small>$${e}</small></div></div><div class="card"><div style="display:flex;gap:14px;align-items:center"><div class="ico q">Q</div><div><b>PQC Token</b><br><small style="color:var(--t)">PQC • $${prices.PQC}</small></div></div><div style="text-align:right"><b>1,200 PQC</b><br><small style="color:#2ed47a">Quantum Native</small></div></div>`;renderTx();document.getElementById('liveP').innerText=`BTC $${prices.BTC} • ETH $${prices.ETH} • PQC $${prices.PQC} • LIVE`}
-function renderTx(){document.getElementById('tx').innerHTML=txs.map(t=>`<div style="margin:8px 0"><b>${t.t}</b><br><small style="color:var(--t)">${t.a} • ${t.time}</small></div>`).join('')||'<small style="color:var(--t)">No tx</small>'}
-function addTx(t,a){txs.unshift({t,a,time:new Date().toLocaleString()});localStorage.setItem('qtx',JSON.stringify(txs.slice(0,20)));renderTx()}
-function openS(){document.getElementById('mS').classList.add('on')}function openR(){document.getElementById('mR').classList.add('on');if(cur){document.getElementById('qr').innerHTML="";new QRCode(document.getElementById('qr'),{text:cur,width:160,height:160})}}function cls(){document.querySelectorAll('.modal').forEach(x=>x.classList.remove('on'))}function send(){let am=document.getElementById('am').value||'0.1';let to=document.getElementById('to').value||'qtrust_xxx';cls();addTx(`Sent ${am} PQC to ${to.slice(0,10)}...`, 'ML-DSA87 Signed ✓')}function copy(){navigator.clipboard.writeText(cur);addTx('Address Copied','')}function openSeed(){document.getElementById('seed').innerText=localStorage.getItem('qseed')||'';document.getElementById('pk').innerText='PK: '+(localStorage.getItem('qpk')||'');document.getElementById('mSeed').classList.add('on')}function nav(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.getElementById('p-'+p).classList.add('on');document.querySelectorAll('.nv').forEach(x=>x.classList.remove('on'));event.currentTarget.classList.add('on');if(p=='discover'){document.getElementById('coins').innerHTML=Object.entries(prices).map(([k,v])=>`<div class="card"><b>${k}</b><span>$${v}</span></div>`).join('')+`<div class="card"><b>SOL</b><span>$150</span></div><div class="card"><b>MATIC</b><span>$0.9</span></div>`}}function doSwap(){let f=parseFloat(document.getElementById('swapFrom').value)||0;let fc=document.getElementById('fromC').value,tc=document.getElementById('toC').value;let usd=f*prices[fc];let out=usd/prices[tc];document.getElementById('swapTo').value=out.toFixed(6)+' '+tc;addTx(`Swapped ${f} ${fc} → ${out.toFixed(4)} ${tc}`,`Rate $${prices[fc]}/${prices[tc]}`)}function toggleTheme(){document.body.classList.toggle('light')}function scan(){openR();let html5Qr=new Html5Qrcode("reader");html5Qr.start({facingMode:"environment"},{fps:10,qrbox:200},(txt)=>{document.getElementById('to').value=txt;html5Qr.stop();openS()},()=>{}).catch(()=>{})}function clearTx(){txs=[];localStorage.removeItem('qtx');renderTx()}function unlock(){if(document.getElementById('pin').value=='1234'){document.getElementById('lock').style.display='none'}else alert('PIN 1234')}function lock(){document.getElementById('lock').style.display='flex'}
-let sv=localStorage.getItem('qtrust_pro');if(sv){cur=sv}else gen();fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd').then(r=>r.json()).then(d=>{if(d.bitcoin)prices.BTC=d.bitcoin.usd;if(d.ethereum)prices.ETH=d.ethereum.usd;render()}).catch(()=>render());render();
-</script></body></html>
+// Supported Networks
+const NETWORKS = {
+  sepolia: { name: "Sepolia ETH", rpc: "https://ethereum-sepolia-rpc.publicnode.com", explorer: "https://sepolia.etherscan.io/tx/" },
+  baseSepolia: { name: "Base Sepolia", rpc: "https://sepolia.base.org", explorer: "https://sepolia.basescan.org/tx/" }
+};
+
+let currentNet = NETWORKS.sepolia;
+let provider = new ethers.JsonRpcProvider(currentNet.rpc);
+let activeWallet = null;
+let ethBalance = 0.0;
+let ethPrice = 2800; // Default fallback
+let txHistory = JSON.parse(localStorage.getItem('qtrust_tx_v2') || '[]');
+
+// 1. Initialize Wallet
+function init() {
+  const pk = localStorage.getItem('qtrust_pk_v2');
+  if (pk) {
+    activeWallet = new ethers.Wallet(pk, provider);
+  } else {
+    const newWallet = ethers.Wallet.createRandom();
+    localStorage.setItem('qtrust_pk_v2', newWallet.privateKey);
+    localStorage.setItem('qtrust_phrase_v2', newWallet.mnemonic.phrase);
+    activeWallet = new ethers.Wallet(newWallet.privateKey, provider);
+  }
+  updateUI();
+  refreshData();
+}
+
+// 2. Fetch Live Balance & Pricing
+async function refreshData() {
+  if (!activeWallet) return;
+  const icon = document.querySelector("#refreshIcon i");
+  icon.classList.add("fa-spin");
+
+  try {
+    // Balance
+    const balWei = await provider.getBalance(activeWallet.address);
+    ethBalance = parseFloat(ethers.formatEther(balWei));
+    
+    // CoinGecko Price
+    const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd");
+    const data = await res.json();
+    if (data.ethereum) ethPrice = data.ethereum.usd;
+
+    renderBalances();
+  } catch(e) {
+    console.error("Refresh Error:", e);
+  } finally {
+    icon.classList.remove("fa-spin");
+  }
+}
+
+function renderBalances() {
+  const totalUsd = (ethBalance * ethPrice).toFixed(2);
+  document.getElementById('fiatTotal').innerText = `$${Number(totalUsd).toLocaleString()}`;
+  document.getElementById('cryptoTotal').innerText = `${ethBalance.toFixed(4)} ETH`;
+  document.getElementById('tokenBalance').innerText = `${ethBalance.toFixed(4)} ETH`;
+  document.getElementById('tokenFiatValue').innerText = `$${Number(totalUsd).toLocaleString()}`;
+  document.getElementById('ethPriceDisplay').innerText = `$${ethPrice.toLocaleString()}`;
+}
+
+function updateUI() {
+  const addr = activeWallet.address;
+  document.getElementById('accountDisplay').innerText = `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  document.getElementById('fullAddressText').innerText = addr;
+  
+  // Render QR
+  document.getElementById('qrcodeBox').innerHTML = "";
+  new QRCode(document.getElementById('qrcodeBox'), { text: addr, width: 150, height: 150 });
+
+  renderHistory();
+}
+
+// 3. Send Transaction with 'MAX' & Live Status
+function setMaxBalance() {
+  const safeReserve = 0.0005; // Reserve for Gas fees
+  const max = Math.max(0, ethBalance - safeReserve);
+  document.getElementById('sendAmount').value = max.toFixed(4);
+}
+
+async function executeSend() {
+  const to = document.getElementById('sendTo').value.trim();
+  const amount = document.getElementById('sendAmount').value.trim();
+  const feedback = document.getElementById('txFeedback');
+  const btn = document.getElementById('btnConfirmSend');
+
+  if (!ethers.isAddress(to)) return showToast("Invalid 0x recipient address");
+  if (!amount || parseFloat(amount) <= 0 || parseFloat(amount) > ethBalance) return showToast("Invalid amount or insufficient funds");
+
+  try {
+    btn.disabled = true;
+    feedback.innerText = "Submitting to Blockchain...";
+    
+    const tx = await activeWallet.sendTransaction({
+      to: to,
+      value: ethers.parseEther(amount)
+    });
+
+    feedback.innerText = "Confirming on network...";
+    saveTx(`Sent ${amount} ETH`, tx.hash);
+    
+    await tx.wait(1);
+    feedback.innerText = "Transfer Confirmed! ✅";
+    showToast("Transaction Success!");
+    
+    setTimeout(() => {
+      closeModals();
+      feedback.innerText = "";
+      btn.disabled = false;
+      document.getElementById('sendTo').value = "";
+      document.getElementById('sendAmount').value = "";
+      refreshData();
+    }, 1500);
+
+  } catch(e) {
+    feedback.innerText = "Failed: " + (e.reason || "Transaction rejected");
+    btn.disabled = false;
+  }
+}
+
+// 4. Utility Functions
+function copyAddress() {
+  navigator.clipboard.writeText(activeWallet.address);
+  showToast("Address copied to clipboard!");
+}
+
+function showToast(text) {
+  const t = document.getElementById('toast');
+  t.innerText = text;
+  t.style.display = "block";
+  setTimeout(() => t.style.display = "none", 2200);
+}
+
+function openFaucet() {
+  window.open("https://cloud.google.com/application/web3/faucet/ethereum/sepolia", "_blank");
+}
+
+function switchNetworkPrompt() {
+  if (currentNet === NETWORKS.sepolia) {
+    currentNet = NETWORKS.baseSepolia;
+  } else {
+    currentNet = NETWORKS.sepolia;
+  }
+  provider = new ethers.JsonRpcProvider(currentNet.rpc);
+  activeWallet = new ethers.Wallet(activeWallet.privateKey, provider);
+  document.getElementById('currentNetworkName').innerText = currentNet.name;
+  showToast(`Switched to ${currentNet.name}`);
+  refreshData();
+}
+
+function saveTx(title, hash) {
+  txHistory.unshift({ title, hash, time: new Date().toLocaleTimeString() });
+  localStorage.setItem('qtrust_tx_v2', JSON.stringify(txHistory.slice(0, 10)));
+  renderHistory();
+}
+
+function renderHistory() {
+  const list = document.getElementById('txList');
+  if (txHistory.length === 0) {
+    list.innerHTML = `<p style="padding:16px 20px;font-size:12px;color:var(--text-sub)">No transactions yet</p>`;
+    return;
+  }
+  list.innerHTML = txHistory.map(t => `
+    <div class="tx-item">
+      <div>
+        <b style="font-size:13px">${t.title}</b>
+        <p style="font-size:11px;color:var(--text-sub)">${t.time}</p>
+      </div>
+      <a href="${currentNet.explorer}${t.hash}" target="_blank" style="color:var(--primary);font-size:12px;text-decoration:none">Explorer ↗</a>
+    </div>
+  `).join('');
+}
+
+function clearHistory() {
+  txHistory = [];
+  localStorage.removeItem('qtrust_tx_v2');
+  renderHistory();
+}
+
+function createNewWalletPrompt() {
+  if (confirm("Generate new wallet? Make sure you backed up your keys!")) {
+    localStorage.removeItem('qtrust_pk_v2');
+    localStorage.removeItem('qtrust_phrase_v2');
+    init();
+  }
+}
+
+// Modals & Navigation
+function openSendModal() { document.getElementById('modalSend').classList.add('on'); }
+function openReceiveModal() { document.getElementById('modalReceive').classList.add('on'); }
+function openSeedModal() {
+  document.getElementById('seedPhraseText').innerText = localStorage.getItem('qtrust_phrase_v2') || 'Imported via PK';
+  document.getElementById('privateKeyText').innerText = `PK: ${activeWallet.privateKey}`;
+  document.getElementById('modalSeed').classList.add('on');
+}
+function closeModals() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('on')); }
+function switchTab(t) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`page-${t}`).classList.add('on');
+  event.currentTarget.classList.add('active');
+}
+function toggleTheme() { document.body.classList.toggle('light'); }
+
+function scanQR() {
+  const qr = new Html5Qrcode("qrScannerArea");
+  qr.start({ facingMode: "environment" }, { fps: 10, qrbox: 200 }, (txt) => {
+    document.getElementById('sendTo').value = txt;
+    qr.stop();
+  }).catch(()=>{});
+}
+
+init();
+</script>
+</body>
+</html>

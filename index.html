@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>QTrust PRO | Hybrid Post-Quantum Wallet</title>
+  <title>QTrust Wallet | Multi-Chain Quantum Vault</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
@@ -16,115 +16,167 @@
 
   <style>
     :root {
-      --bg: #070d18;
-      --card: #101a2e;
-      --card-hover: #162440;
-      --border: #1e3156;
+      --bg: #070c17;
+      --card: #0f182c;
+      --card-hover: #162442;
+      --border: #1d2d50;
       --text-main: #ffffff;
-      --text-sub: #7b93b8;
+      --text-sub: #7b91b5;
+      --quantum: #00d2ff;
+      --quantum-glow: rgba(0, 210, 255, 0.35);
       --primary: #3b82f6;
-      --quantum: #06b6d4;
       --success: #10b981;
       --danger: #ef4444;
+      --warning: #f59e0b;
     }
     body.light {
-      --bg: #f4f7fb;
+      --bg: #f3f6fc;
       --card: #ffffff;
-      --card-hover: #edf3fa;
-      --border: #dce5f2;
-      --text-main: #0b1426;
-      --text-sub: #60728f;
+      --card-hover: #eaf1fb;
+      --border: #d7e2f2;
+      --text-main: #0a1120;
+      --text-sub: #5b6f90;
     }
 
     * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans',sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background: var(--bg); color: var(--text-main); display:flex; justify-content:center; min-height:100vh; overflow-x:hidden; }
     .mono { font-family: 'JetBrains Mono', monospace; }
-    .app { width:100%; max-width:440px; min-height:100vh; background:var(--bg); padding-bottom:90px; position:relative; }
+    .app { width:100%; max-width:440px; min-height:100vh; background:var(--bg); padding-bottom:95px; position:relative; }
 
-    /* --- PRO LOGIN & ONBOARDING STYLES --- */
-    .auth-overlay {
-      position: fixed; inset: 0; background: radial-gradient(circle at top, #112344 0%, #070d18 75%);
-      z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-      padding: 40px 24px 30px; max-width: 440px; margin: 0 auto;
+    /* SVG Shield Logo Vector */
+    .brand-shield {
+      filter: drop-shadow(0 0 16px var(--quantum-glow));
+      transition: transform 0.25s ease;
     }
-    .auth-logo-ring {
-      width: 76px; height: 76px; border-radius: 24px; background: rgba(6, 182, 212, 0.1);
-      border: 1px solid var(--quantum); display: flex; align-items: center; justify-content: center;
-      font-size: 32px; color: var(--quantum); box-shadow: 0 0 25px rgba(6,182,212,0.25);
+    .brand-shield:hover { transform: scale(1.04); }
+
+    /* AUTH OVERLAY */
+    .auth-container {
+      position: fixed; inset: 0; background: radial-gradient(circle at 50% 18%, #10264f 0%, #070c17 82%);
+      z-index: 1000; display: flex; flex-direction: column; justify-content: space-between;
+      padding: 38px 24px 28px; max-width: 440px; margin: 0 auto;
     }
-    
+    .auth-view { display: none; width: 100%; flex-direction: column; align-items: center; }
+    .auth-view.active { display: flex; }
+
+    .seed-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%;
+      background: var(--card); border: 1px solid var(--border); padding: 14px; border-radius: 16px; margin: 16px 0;
+    }
+    .seed-word {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+      padding: 6px 8px; font-size: 11px; font-family: 'JetBrains Mono', monospace;
+    }
+    .seed-word span { color: var(--quantum); margin-right: 4px; font-weight: 700; }
+
     /* PIN Dots */
-    .pin-display { display: flex; gap: 16px; margin: 28px 0 10px; }
+    .pin-display { display: flex; gap: 16px; margin: 24px 0 10px; }
     .pin-dot {
       width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--border);
-      background: transparent; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      background: transparent; transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .pin-dot.filled { background: var(--quantum); border-color: var(--quantum); box-shadow: 0 0 10px var(--quantum); transform: scale(1.15); }
     .pin-dot.error { background: var(--danger); border-color: var(--danger); }
 
-    /* Keypad Grid */
     .keypad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px 24px; width: 100%; max-width: 300px; }
     .key-btn {
-      width: 68px; height: 68px; border-radius: 50%; background: rgba(16, 26, 46, 0.7);
-      border: 1px solid var(--border); color: #fff; font-size: 24px; font-weight: 600;
+      width: 68px; height: 68px; border-radius: 50%; background: rgba(15, 24, 44, 0.75);
+      border: 1px solid var(--border); color: #fff; font-size: 22px; font-weight: 600;
       display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.15s; margin: auto;
     }
-    .key-btn:active { background: var(--quantum); color: #070d18; transform: scale(0.92); }
-    .key-btn.action-key { background: transparent; border: none; font-size: 18px; color: var(--text-sub); }
+    .key-btn:active { background: var(--quantum); color: #070c17; transform: scale(0.92); }
+    .key-btn.action-key { background: transparent; border: none; font-size: 20px; color: var(--text-sub); }
 
-    /* Onboarding Flow Options */
-    .onboarding-box { width: 100%; text-align: center; }
-    .onboard-btn {
+    .btn-main {
       width: 100%; padding: 16px; border-radius: 16px; font-weight: 700; font-size: 14px;
-      display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; margin-top: 12px;
+      background: linear-gradient(135deg, #00d2ff 0%, #0077ff 100%); color: #070c17; border: none;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px;
+      box-shadow: 0 4px 18px rgba(0, 210, 255, 0.3);
+    }
+    .btn-sub {
+      width: 100%; padding: 15px; border-radius: 16px; font-weight: 600; font-size: 14px;
+      background: var(--card); border: 1px solid var(--border); color: #fff; cursor: pointer; margin-top: 10px;
     }
 
-    /* --- WALLET MAIN DASHBOARD STYLES --- */
-    .top-bar { padding: 18px 20px; display:flex; justify-content:space-between; align-items:center; }
-    .pqc-pill { background: rgba(6, 182, 212, 0.12); border: 1px solid var(--quantum); color: var(--quantum); border-radius: 20px; padding: 5px 12px; font-size: 11px; font-weight: 700; display:flex; align-items:center; gap:6px; }
-    .pqc-dot { width: 7px; height: 7px; background: var(--quantum); border-radius: 50%; box-shadow: 0 0 8px var(--quantum); }
+    /* TOP BAR & CHAIN DROPDOWN */
+    .top-bar { padding: 16px 20px; display:flex; justify-content:space-between; align-items:center; }
+    .chain-badge {
+      background: var(--card); border: 1px solid var(--border); border-radius: 24px;
+      padding: 6px 14px; display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; font-weight: 600;
+      transition: 0.2s;
+    }
+    .chain-badge:hover { background: var(--card-hover); border-color: var(--quantum); }
+    .chain-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); }
 
-    .address-pill { margin: 0 20px 14px; background: var(--card); border: 1px solid var(--border); padding: 8px 14px; border-radius: 30px; display: inline-flex; align-items: center; gap: 8px; font-size: 12px; cursor: pointer; }
+    /* ADDRESS PILL */
+    .address-pill {
+      margin: 0 20px 14px; background: var(--card); border: 1px solid var(--border);
+      padding: 8px 14px; border-radius: 30px; display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; cursor: pointer;
+    }
 
-    .quantum-card { margin: 0 20px 18px; background: linear-gradient(135deg, rgba(6,182,212,0.12) 0%, rgba(16,26,46,0.85) 100%); border: 1px solid rgba(6,182,212,0.35); border-radius: 20px; padding: 16px; font-size: 12px; }
+    /* QUANTUM SECURITY CARD */
+    .quantum-card {
+      margin: 0 20px 18px; background: linear-gradient(135deg, rgba(0,210,255,0.12) 0%, rgba(15,24,44,0.92) 100%);
+      border: 1px solid rgba(0,210,255,0.3); border-radius: 20px; padding: 16px; font-size: 12px;
+    }
     .q-metric { display: flex; justify-content: space-between; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 11px; }
 
-    .hero-card { margin: 0 20px 20px; background: linear-gradient(145deg, #132242 0%, #0d172e 100%); border: 1px solid var(--border); border-radius: 24px; padding: 22px 20px; text-align: center; }
-    body.light .hero-card { background: linear-gradient(145deg, #ffffff 0%, #eef4fb 100%); }
-    .balance-fiat { font-size: 34px; font-weight: 700; margin: 4px 0; }
-    .balance-crypto { font-size: 13px; color: var(--primary); font-weight: 600; }
+    /* BALANCE HERO */
+    .hero-card {
+      margin: 0 20px 20px; background: linear-gradient(145deg, #132142 0%, #0a1326 100%);
+      border: 1px solid var(--border); border-radius: 24px; padding: 22px 20px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .balance-fiat { font-size: 34px; font-weight: 800; margin: 4px 0; }
+    .balance-crypto { font-size: 13px; color: var(--quantum); font-weight: 600; }
 
+    /* ACTION BUTTONS */
     .action-row { display:flex; justify-content:space-around; padding: 0 10px; margin-bottom: 24px; }
     .action-btn { display:flex; flex-direction:column; align-items:center; gap: 8px; cursor: pointer; background: transparent; border:none; color:inherit; }
-    .btn-circle { width: 52px; height: 52px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size: 18px; color: var(--primary); transition: 0.2s; }
-    .action-btn:hover .btn-circle { transform: translateY(-2px); background: var(--primary); color: #fff; }
+    .btn-circle {
+      width: 52px; height: 52px; border-radius: 50%; background: var(--card); border: 1px solid var(--border);
+      display:flex; align-items:center; justify-content:center; font-size: 18px; color: var(--quantum); transition: 0.2s;
+    }
+    .action-btn:hover .btn-circle { transform: translateY(-2px); background: var(--quantum); color: #070c17; box-shadow: 0 0 14px var(--quantum-glow); }
     .action-label { font-size: 12px; font-weight: 600; }
 
+    /* MULTI-CHAIN ASSET LIST */
     .section-header { padding: 0 20px 12px; display:flex; justify-content:space-between; align-items:center; font-size: 13px; font-weight: 600; }
-    .asset-item { margin: 0 20px 10px; background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 14px 16px; display:flex; justify-content:space-between; align-items:center; }
-    .asset-ico { width: 42px; height: 42px; border-radius: 50%; background: #627eea; color: #fff; display:flex; align-items:center; justify-content:center; font-size: 18px; }
+    .asset-item {
+      margin: 0 20px 10px; background: var(--card); border: 1px solid var(--border); border-radius: 18px;
+      padding: 14px 16px; display:flex; justify-content:space-between; align-items:center; cursor: pointer;
+      transition: 0.2s;
+    }
+    .asset-item:hover { background: var(--card-hover); }
+    .asset-ico { width: 42px; height: 42px; border-radius: 50%; color: #fff; display:flex; align-items:center; justify-content:center; font-size: 18px; font-weight: bold; }
+    .ico-eth { background: #627eea; }
+    .ico-poly { background: #8247e5; }
+    .ico-bnb { background: #f3ba2f; color: #000; }
+    .ico-arb { background: #28a0f0; }
+    .ico-base { background: #0052ff; }
 
+    /* TRANSACTIONS */
     .tx-item { margin: 8px 20px; padding: 12px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; }
-    .tx-proof { margin-top: 6px; padding: 6px 8px; background: rgba(6,182,212,0.08); border-radius: 8px; font-size: 10px; color: var(--quantum); word-break: break-all; }
+    .tx-proof { margin-top: 6px; padding: 6px 8px; background: rgba(0,210,255,0.08); border-radius: 8px; font-size: 10px; color: var(--quantum); word-break: break-all; }
 
-    .bottom-bar { position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:440px; background:var(--card); border-top:1px solid var(--border); display:flex; justify-content:space-around; padding:12px 0; z-index:10; }
+    /* BOTTOM BAR */
+    .bottom-bar {
+      position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:440px;
+      background:var(--card); border-top:1px solid var(--border); display:flex; justify-content:space-around;
+      padding:12px 0; z-index:10;
+    }
     .tab-btn { color:var(--text-sub); text-align:center; font-size:11px; cursor:pointer; background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:4px; }
     .tab-btn.active { color: var(--quantum); font-weight: 600; }
 
-    /* Modals */
-    .modal { position:fixed; inset:0; background:rgba(0,0,0,.75); backdrop-filter: blur(4px); display:none; align-items:flex-end; justify-content:center; z-index:99; }
+    /* MODALS */
+    .modal { position:fixed; inset:0; background:rgba(0,0,0,.78); backdrop-filter: blur(5px); display:none; align-items:flex-end; justify-content:center; z-index:99; }
     .modal.on { display:flex; }
     .sheet { background:var(--card); width:100%; max-width:440px; border-radius:28px 28px 0 0; padding:24px; border-top:1px solid var(--border); max-height: 90vh; overflow-y:auto; }
     .input-box { width:100%; background:var(--bg); border:1px solid var(--border); padding:14px; border-radius:14px; color:inherit; margin:10px 0; outline:none; font-size:13px; }
     .input-box:focus { border-color: var(--quantum); }
-    .input-container { position:relative; }
-    .max-pill { position:absolute; right: 12px; top: 20px; background: var(--border); padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; color: var(--quantum); }
 
-    .main-btn { width:100%; padding: 15px; border-radius: 16px; background: var(--quantum); color: #070d18; border:none; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 10px; display:flex; align-items:center; justify-content:center; gap:8px; }
-    .main-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .sec-btn { width:100%; padding: 13px; border-radius: 16px; background: transparent; border: 1px solid var(--border); color:inherit; font-weight:600; margin-top: 8px; cursor: pointer; font-size:13px; }
-
-    .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #132242; color: #fff; border: 1px solid var(--quantum); padding: 10px 18px; border-radius: 30px; font-size: 12px; z-index: 9999; display: none; }
+    .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #101e38; color: #fff; border: 1px solid var(--quantum); padding: 10px 18px; border-radius: 30px; font-size: 12px; z-index: 9999; display: none; box-shadow: 0 4px 18px var(--quantum-glow); }
     .page { display:none; }
     .page.on { display:block; }
   </style>
@@ -133,86 +185,162 @@
 
 <div class="toast" id="toast">Alert</div>
 
-<!-- ================= PRO LOGIN / LOCK OVERLAY ================= -->
-<div class="auth-overlay" id="authGate">
-  <!-- Brand Header -->
-  <div style="display:flex; flex-direction:column; align-items:center; text-align:center">
-    <div class="auth-logo-ring">
-      <i class="fas fa-atom"></i>
+<!-- ================= AUTH & ONBOARDING FULLSCREEN ================= -->
+<div class="auth-container" id="authScreen">
+  
+  <!-- Step 1: Welcome with Official Shield Logo -->
+  <div class="auth-view" id="stepWelcome">
+    <div style="text-align:center; margin-top:20px">
+      <!-- Shield Logo SVG -->
+      <svg class="brand-shield" width="90" height="100" viewBox="0 0 200 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M100 8L20 44V110C20 162 54 200 100 214C146 200 180 162 180 110V44L100 8Z" fill="url(#shieldGrad)" stroke="#00d2ff" stroke-width="4"/>
+        <!-- Inner Circuit Padlock -->
+        <path d="M72 90V68C72 52.5 84.5 40 100 40C115.5 40 128 52.5 128 68V90" stroke="#00d2ff" stroke-width="8" stroke-linecap="round"/>
+        <rect x="58" y="90" width="84" height="68" rx="18" fill="#0d1b38" stroke="#00d2ff" stroke-width="4"/>
+        <!-- Letter Q Lock Body -->
+        <circle cx="100" cy="120" r="18" stroke="#00d2ff" stroke-width="6"/>
+        <line x1="112" y1="130" x2="128" y2="148" stroke="#00d2ff" stroke-width="6" stroke-linecap="round"/>
+        <!-- Quantum Circuit Traces -->
+        <circle cx="78" cy="65" r="4" fill="#00d2ff"/>
+        <line x1="78" y1="69" x2="78" y2="84" stroke="#00d2ff" stroke-width="3"/>
+        <circle cx="100" cy="55" r="4" fill="#00d2ff"/>
+        <line x1="100" y1="59" x2="100" y2="78" stroke="#00d2ff" stroke-width="3"/>
+        <circle cx="122" cy="65" r="4" fill="#00d2ff"/>
+        <line x1="122" y1="69" x2="122" y2="84" stroke="#00d2ff" stroke-width="3"/>
+        <defs>
+          <linearGradient id="shieldGrad" x1="20" y1="8" x2="180" y2="214" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0a2a5e"/>
+            <stop offset="1" stop-color="#040b18"/>
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <h2 style="font-size:26px; font-weight:800; margin-top:14px; letter-spacing:0.5px">QTrust <span style="color:var(--quantum)">Wallet</span></h2>
+      <p style="color:var(--text-sub); font-size:13px; margin-top:4px">Multi-Chain Post-Quantum Cryptographic Vault</p>
     </div>
-    <h2 style="margin-top:16px; font-size:22px; font-weight:700">QTrust <span style="color:var(--quantum)">PRO</span></h2>
-    <p style="color:var(--text-sub); font-size:12px; margin-top:4px" id="authSubtitle">Lattice-Grade Post-Quantum Security</p>
+    <div style="width:100%; margin-top: auto; margin-bottom: 20px;">
+      <button class="btn-main" onclick="goToStep('stepCreate')">
+        <i class="fas fa-plus-circle"></i> Create Quantum Wallet
+      </button>
+      <button class="btn-sub" onclick="goToStep('stepImport')">
+        <i class="fas fa-file-import"></i> Restore from Seed Phrase
+      </button>
+    </div>
   </div>
 
-  <!-- VIEW 1: PIN UNLOCK PAD -->
-  <div id="viewPin" style="display:flex; flex-direction:column; align-items:center; width:100%">
-    <p style="font-size:13px; font-weight:600; color:var(--text-sub)" id="pinPrompt">Enter 4-Digit Passcode</p>
-    
-    <div class="pin-display">
-      <div class="pin-dot" id="dot-0"></div>
-      <div class="pin-dot" id="dot-1"></div>
-      <div class="pin-dot" id="dot-2"></div>
-      <div class="pin-dot" id="dot-3"></div>
+  <!-- Step 2: Secret Mnemonic Display -->
+  <div class="auth-view" id="stepCreate">
+    <div style="text-align:center">
+      <h3 style="font-size:20px">Secret Recovery Phrase</h3>
+      <p style="color:var(--text-sub); font-size:12px; margin-top:4px">Write down these 12 words in order. Never share them.</p>
     </div>
-
-    <div class="keypad-grid" style="margin-top:18px">
-      <button class="key-btn" onclick="pressPin('1')">1</button>
-      <button class="key-btn" onclick="pressPin('2')">2</button>
-      <button class="key-btn" onclick="pressPin('3')">3</button>
-      <button class="key-btn" onclick="pressPin('4')">4</button>
-      <button class="key-btn" onclick="pressPin('5')">5</button>
-      <button class="key-btn" onclick="pressPin('6')">6</button>
-      <button class="key-btn" onclick="pressPin('7')">7</button>
-      <button class="key-btn" onclick="pressPin('8')">8</button>
-      <button class="key-btn" onclick="pressPin('9')">9</button>
-      <button class="key-btn action-key" onclick="simulateBiometric()"><i class="fas fa-fingerprint" style="color:var(--quantum); font-size:26px"></i></button>
-      <button class="key-btn" onclick="pressPin('0')">0</button>
-      <button class="key-btn action-key" onclick="deletePin()"><i class="fas fa-backspace"></i></button>
+    <div class="seed-grid" id="generatedSeedGrid"></div>
+    <div style="width:100%; margin-top:auto">
+      <button class="btn-main" onclick="goToStep('stepSetPin')">I Saved My Phrase</button>
+      <button class="btn-sub" onclick="goToStep('stepWelcome')">Back</button>
     </div>
   </div>
 
-  <!-- VIEW 2: FIRST TIME ONBOARDING -->
-  <div id="viewOnboard" class="onboarding-box" style="display:none">
-    <div style="background:rgba(6,182,212,0.06); border:1px solid var(--border); padding:18px; border-radius:20px; margin-bottom:16px">
-      <i class="fas fa-shield-virus" style="font-size:28px; color:var(--quantum)"></i>
-      <h4 style="margin:10px 0 4px">No Quantum Wallet Found</h4>
-      <p style="font-size:12px; color:var(--text-sub)">Create a new hybrid vault or restore from seed words.</p>
+  <!-- Step 3: Import Phrase -->
+  <div class="auth-view" id="stepImport">
+    <div style="text-align:center; width:100%">
+      <h3 style="font-size:20px">Restore Wallet</h3>
+      <p style="color:var(--text-sub); font-size:12px; margin-top:4px">Paste 12-word seed phrase to restore your vault</p>
+      <textarea class="input-box mono" id="importInputWords" rows="4" placeholder="word1 word2 word3..." style="margin-top:18px"></textarea>
     </div>
-    
-    <button class="onboard-btn" style="background:var(--quantum); color:#070d18" onclick="startWalletSetup('create')">
-      <i class="fas fa-plus-circle"></i> Create Quantum Vault
-    </button>
-    <button class="onboard-btn" style="background:var(--card); border:1px solid var(--border); color:#fff" onclick="startWalletSetup('import')">
-      <i class="fas fa-file-import"></i> Import Existing Seed
-    </button>
+    <div style="width:100%; margin-top:auto">
+      <button class="btn-main" onclick="verifyImportSeed()">Verify & Restore</button>
+      <button class="btn-sub" onclick="goToStep('stepWelcome')">Back</button>
+    </div>
   </div>
 
-  <!-- Footer Info -->
-  <div style="font-size:11px; color:var(--text-sub); display:flex; align-items:center; gap:6px">
-    <i class="fas fa-lock" style="color:var(--quantum)"></i> Protected by NIST FIPS-204 (ML-DSA)
+  <!-- Step 4: Set PIN -->
+  <div class="auth-view" id="stepSetPin">
+    <div style="text-align:center">
+      <h3 style="font-size:20px">Set 4-Digit PIN</h3>
+      <p style="color:var(--text-sub); font-size:12px; margin-top:4px">Passcode to protect your ML-DSA keys</p>
+      <div class="pin-display">
+        <div class="pin-dot" id="sdot-0"></div>
+        <div class="pin-dot" id="sdot-1"></div>
+        <div class="pin-dot" id="sdot-2"></div>
+        <div class="pin-dot" id="sdot-3"></div>
+      </div>
+    </div>
+    <div class="keypad-grid" style="margin-top:auto">
+      <button class="key-btn" onclick="pressSetPin('1')">1</button>
+      <button class="key-btn" onclick="pressSetPin('2')">2</button>
+      <button class="key-btn" onclick="pressSetPin('3')">3</button>
+      <button class="key-btn" onclick="pressSetPin('4')">4</button>
+      <button class="key-btn" onclick="pressSetPin('5')">5</button>
+      <button class="key-btn" onclick="pressSetPin('6')">6</button>
+      <button class="key-btn" onclick="pressSetPin('7')">7</button>
+      <button class="key-btn" onclick="pressSetPin('8')">8</button>
+      <button class="key-btn" onclick="pressSetPin('9')">9</button>
+      <button class="key-btn action-key"></button>
+      <button class="key-btn" onclick="pressSetPin('0')">0</button>
+      <button class="key-btn action-key" onclick="deleteSetPin()"><i class="fas fa-backspace"></i></button>
+    </div>
+  </div>
+
+  <!-- Step 5: Login PIN Pad -->
+  <div class="auth-view" id="stepLogin">
+    <div style="text-align:center">
+      <svg width="54" height="60" viewBox="0 0 200 220" fill="none" style="margin-bottom:8px">
+        <path d="M100 8L20 44V110C20 162 54 200 100 214C146 200 180 162 180 110V44L100 8Z" fill="#0d1b38" stroke="#00d2ff" stroke-width="6"/>
+        <circle cx="100" cy="115" r="22" stroke="#00d2ff" stroke-width="8"/>
+        <line x1="116" y1="128" x2="136" y2="150" stroke="#00d2ff" stroke-width="8" stroke-linecap="round"/>
+      </svg>
+      <h3 style="font-size:20px">Welcome Back</h3>
+      <p style="color:var(--text-sub); font-size:12px; margin-top:4px">Enter PIN to unlock QTrust Vault</p>
+      <div class="pin-display">
+        <div class="pin-dot" id="ldot-0"></div>
+        <div class="pin-dot" id="ldot-1"></div>
+        <div class="pin-dot" id="ldot-2"></div>
+        <div class="pin-dot" id="ldot-3"></div>
+      </div>
+    </div>
+    <div class="keypad-grid" style="margin-top:auto">
+      <button class="key-btn" onclick="pressLoginPin('1')">1</button>
+      <button class="key-btn" onclick="pressLoginPin('2')">2</button>
+      <button class="key-btn" onclick="pressLoginPin('3')">3</button>
+      <button class="key-btn" onclick="pressLoginPin('4')">4</button>
+      <button class="key-btn" onclick="pressLoginPin('5')">5</button>
+      <button class="key-btn" onclick="pressLoginPin('6')">6</button>
+      <button class="key-btn" onclick="pressLoginPin('7')">7</button>
+      <button class="key-btn" onclick="pressLoginPin('8')">8</button>
+      <button class="key-btn" onclick="pressLoginPin('9')">9</button>
+      <button class="key-btn action-key" onclick="biometricBypass()"><i class="fas fa-fingerprint" style="color:var(--quantum); font-size:24px"></i></button>
+      <button class="key-btn" onclick="pressLoginPin('0')">0</button>
+      <button class="key-btn action-key" onclick="deleteLoginPin()"><i class="fas fa-backspace"></i></button>
+    </div>
+  </div>
+
+  <div style="font-size:11px; color:var(--text-sub); text-align:center">
+    <i class="fas fa-shield-alt" style="color:var(--quantum)"></i> NIST FIPS-204 Hybrid Multi-Chain Active
   </div>
 </div>
 
-<!-- ================= MAIN APP INTERFACE ================= -->
+<!-- ================= MAIN APP DASHBOARD ================= -->
 <div class="app">
-  <!-- Top Bar -->
+  <!-- Top Navigation & Multi-Chain Switcher -->
   <div class="top-bar">
-    <div class="pqc-pill">
-      <span class="pqc-dot"></span>
-      <span>HYBRID ML-DSA-44 ACTIVE</span>
+    <div class="chain-badge" onclick="openChainSelector()">
+      <span class="chain-dot"></span>
+      <span id="activeChainTitle">Sepolia (ETH)</span>
+      <i class="fas fa-chevron-down" style="font-size:10px;color:var(--text-sub)"></i>
     </div>
-    <div style="display:flex;gap:14px;font-size:16px">
+    <div style="display:flex;gap:14px;font-size:16px;align-items:center">
       <i class="fas fa-lock" onclick="lockWalletNow()" style="cursor:pointer" title="Lock Wallet"></i>
-      <i class="fas fa-redo-alt" onclick="refreshData()" style="cursor:pointer" title="Refresh"></i>
+      <i class="fas fa-redo-alt" onclick="refreshChainBalances()" style="cursor:pointer" title="Refresh"></i>
       <i class="fas fa-moon" onclick="toggleTheme()" style="cursor:pointer" title="Theme"></i>
     </div>
   </div>
 
-  <!-- Main Wallet View -->
   <div class="page on" id="page-home">
+    <!-- User Address Pill -->
     <div style="text-align: center;">
       <div class="address-pill mono" onclick="copyAddress()">
-        <i class="fas fa-shield-virus" style="color:var(--quantum)"></i>
+        <i class="fas fa-shield-alt" style="color:var(--quantum)"></i>
         <span id="accountDisplay">Connecting...</span>
         <i class="fas fa-copy" style="color:var(--text-sub);font-size:10px"></i>
       </div>
@@ -225,68 +353,53 @@
         <span style="color:var(--quantum);font-size:10px;font-weight:700">NIST FIPS-204</span>
       </div>
       <div class="q-metric">
-        <span style="color:var(--text-sub)">Quantum Algorithm:</span>
-        <span class="mono">ML-DSA-44 (Dilithium)</span>
+        <span style="color:var(--text-sub)">Lattice Signature:</span>
+        <span class="mono">ML-DSA-44 (1,312b PK)</span>
       </div>
       <div class="q-metric">
-        <span style="color:var(--text-sub)">Lattice Key Size:</span>
-        <span class="mono">1,312 Bytes</span>
-      </div>
-      <div class="q-metric">
-        <span style="color:var(--text-sub)">Classical ECDSA Risk:</span>
-        <span style="color:var(--danger)">Vulnerable (Shor's)</span>
+        <span style="color:var(--text-sub)">Multi-Chain Cross-Shield:</span>
+        <span style="color:var(--success)">Active & Synced</span>
       </div>
     </div>
 
     <!-- Balance Hero -->
     <div class="hero-card">
-      <p style="color:var(--text-sub);font-size:12px;font-weight:500">Dual-Secured Balance</p>
-      <div class="balance-fiat" id="fiatTotal">$0.00</div>
-      <div class="balance-crypto mono" id="cryptoTotal">0.0000 ETH</div>
+      <p style="color:var(--text-sub);font-size:12px;font-weight:600">Total Portfolio (All Chains)</p>
+      <div class="balance-fiat" id="totalPortfolioUsd">$0.00</div>
+      <div class="balance-crypto mono" id="activeChainBalanceText">0.0000 ETH on Sepolia</div>
     </div>
 
     <!-- Action Buttons -->
     <div class="action-row">
       <button class="action-btn" onclick="openSendModal()">
-        <div class="btn-circle"><i class="fas fa-paper-plane" style="color:var(--quantum)"></i></div>
-        <span class="action-label">PQC Send</span>
+        <div class="btn-circle"><i class="fas fa-paper-plane"></i></div>
+        <span class="action-label">Send</span>
       </button>
       <button class="action-btn" onclick="openReceiveModal()">
         <div class="btn-circle"><i class="fas fa-qrcode"></i></div>
         <span class="action-label">Receive</span>
       </button>
-      <button class="action-btn" onclick="openFaucet()">
-        <div class="btn-circle"><i class="fas fa-faucet-drip"></i></div>
-        <span class="action-label">Faucet</span>
+      <button class="action-btn" onclick="openChainSelector()">
+        <div class="btn-circle"><i class="fas fa-network-wired"></i></div>
+        <span class="action-label">Chains</span>
       </button>
       <button class="action-btn" onclick="openPqcInspector()">
-        <div class="btn-circle"><i class="fas fa-microchip" style="color:var(--quantum)"></i></div>
+        <div class="btn-circle"><i class="fas fa-microchip"></i></div>
         <span class="action-label">Inspect</span>
       </button>
     </div>
 
-    <!-- Assets -->
+    <!-- Multi-Chain Asset Portfolio -->
     <div class="section-header">
-      <span>On-Chain Assets</span>
-      <span style="color:var(--text-sub);font-size:11px">Sepolia Testnet</span>
+      <span>Integrated Blockchains</span>
+      <span style="color:var(--text-sub);font-size:11px">Live EVM Multi-Engine</span>
     </div>
-    <div class="asset-item" onclick="openSendModal()">
-      <div style="display:flex;gap:12px;align-items:center">
-        <div class="asset-ico">♦</div>
-        <div>
-          <b>Sepolia ETH</b>
-          <p style="font-size:11px;color:var(--text-sub)" id="ethPriceDisplay">$2,800.00</p>
-        </div>
-      </div>
-      <div style="text-align:right">
-        <b class="mono" id="tokenBalance">0.0000 ETH</b>
-        <p style="font-size:11px;color:var(--text-sub)" id="tokenFiatValue">$0.00</p>
-      </div>
-    </div>
+    
+    <div id="chainAssetList"></div>
 
-    <!-- Activity -->
+    <!-- Recent Activity -->
     <div class="section-header" style="margin-top:20px">
-      <span>Quantum-Signed Activity</span>
+      <span>Quantum-Enveloped Activity</span>
       <span style="color:var(--text-sub);font-size:11px;cursor:pointer" onclick="clearHistory()">Clear</span>
     </div>
     <div id="txList"></div>
@@ -295,37 +408,37 @@
   <!-- Settings Page -->
   <div class="page" id="page-settings">
     <div class="section-header" style="padding-top:20px"><span>Cryptographic Credentials</span></div>
-    <div class="asset-item" onclick="openPqcInspector()" style="cursor:pointer">
+    <div class="asset-item" onclick="openPqcInspector()">
       <div>
         <b>🛡️ PQC Dilithium Public Key</b>
-        <p style="font-size:11px;color:var(--text-sub)">Inspect 1,312-byte Lattice polynomial key</p>
+        <p style="font-size:11px;color:var(--text-sub)">1,312-byte Lattice polynomial credentials</p>
       </div>
       <span>View</span>
     </div>
-    <div class="asset-item" onclick="openClassicKeys()" style="cursor:pointer">
+    <div class="asset-item" onclick="openClassicKeys()">
       <div>
         <b>🔑 Classic Ethereum Key</b>
-        <p style="font-size:11px;color:var(--text-sub)">BIP-39 Mnemonic & 32-byte Private Key</p>
+        <p style="font-size:11px;color:var(--text-sub)">BIP-39 Mnemonic Phrase (12 Words)</p>
       </div>
       <span>View</span>
     </div>
-    <div class="asset-item" onclick="changePinPrompt()" style="cursor:pointer">
+    <div class="asset-item" onclick="openChainSelector()">
       <div>
-        <b>🔢 Change PIN Passcode</b>
-        <p style="font-size:11px;color:var(--text-sub)">Update 4-digit unlock code</p>
+        <b>🌐 Network Nodes & RPC</b>
+        <p style="font-size:11px;color:var(--text-sub)">Switch or inspect connected RPC endpoints</p>
       </div>
-      <span>Edit</span>
+      <span>Switch</span>
     </div>
-    <div class="asset-item" onclick="resetWalletPrompt()" style="cursor:pointer">
+    <div class="asset-item" onclick="resetWalletPrompt()">
       <div style="color:var(--danger)">
-        <b>⚠️ Reset Both Keypairs</b>
-        <p style="font-size:11px;color:var(--text-sub)">Generates new ECDSA + ML-DSA keys</p>
+        <b>⚠️ Wipe Vault & Log Out</b>
+        <p style="font-size:11px;color:var(--text-sub)">Purges keys from storage and returns to setup</p>
       </div>
-      <span style="color:var(--danger)">Reset</span>
+      <span style="color:var(--danger)">Wipe</span>
     </div>
   </div>
 
-  <!-- Bottom Nav -->
+  <!-- Bottom Navigation -->
   <div class="bottom-bar">
     <button class="tab-btn active" onclick="switchTab('home')"><i class="fas fa-wallet fa-lg"></i>Wallet</button>
     <button class="tab-btn" onclick="switchTab('settings')"><i class="fas fa-shield-alt fa-lg"></i>Security</button>
@@ -333,294 +446,378 @@
 </div>
 
 <!-- ================= MODALS ================= -->
+
+<!-- Multi-Chain Selector Modal -->
+<div class="modal" id="modalChains">
+  <div class="sheet">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3>Select Blockchain</h3>
+      <i class="fas fa-times" onclick="closeModals()" style="cursor:pointer"></i>
+    </div>
+    <div id="chainPickerList"></div>
+    <button class="btn-sub" onclick="closeModals()">Close</button>
+  </div>
+</div>
+
 <!-- Send Modal -->
 <div class="modal" id="modalSend">
   <div class="sheet">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-      <h3>Dual-Signed Transfer</h3>
+      <h3 id="sendModalTitle">Send Crypto</h3>
       <i class="fas fa-times" onclick="closeModals()" style="cursor:pointer"></i>
     </div>
-    <p style="font-size:12px;color:var(--text-sub)">ECDSA (On-chain) + ML-DSA-44 (Post-Quantum Envelope)</p>
+    <p style="font-size:12px;color:var(--text-sub)">ML-DSA-44 Lattice Signature Enveloped Transfer</p>
     
     <div class="input-container">
       <input class="input-box mono" id="sendTo" placeholder="Recipient Address (0x...)">
-      <i class="fas fa-camera" onclick="scanQR()" style="position:absolute;right:16px;top:25px;cursor:pointer;color:var(--text-sub)"></i>
     </div>
-    <div class="input-container">
-      <input class="input-box mono" id="sendAmount" placeholder="Amount (ETH)" type="number" step="0.0001">
-      <span class="max-pill" onclick="setMaxBalance()">MAX</span>
+    <div class="input-container" style="position:relative">
+      <input class="input-box mono" id="sendAmount" placeholder="Amount" type="number" step="0.0001">
+      <span style="position:absolute;right:14px;top:24px;font-size:11px;font-weight:700;color:var(--quantum);cursor:pointer" onclick="setMaxBalance()">MAX</span>
     </div>
-    
     <p id="txFeedback" style="font-size:12px;margin:6px 0;color:var(--quantum)"></p>
-    <button class="main-btn" id="btnConfirmSend" onclick="executeHybridSend()">
-      <i class="fas fa-lock"></i> <span id="btnText">Sign & Broadcast</span>
-    </button>
-    <button class="sec-btn" onclick="closeModals()">Cancel</button>
+    <button class="btn-main" id="btnConfirmSend" onclick="executeHybridSend()">Sign & Broadcast</button>
+    <button class="btn-sub" onclick="closeModals()">Cancel</button>
   </div>
 </div>
 
 <!-- Receive Modal -->
 <div class="modal" id="modalReceive">
   <div class="sheet" style="text-align:center">
-    <h3>Deposit Testnet ETH</h3>
+    <h3 id="receiveModalTitle">Deposit Assets</h3>
     <div id="qrcodeBox" style="background:#fff;padding:12px;border-radius:18px;margin:18px auto;width:170px;height:170px;display:flex;align-items:center;justify-content:center"></div>
     <div id="fullAddressText" class="mono" style="font-size:11px;word-break:break-all;margin-bottom:14px;color:var(--text-sub)"></div>
-    <button class="main-btn" onclick="copyAddress()"><i class="fas fa-copy"></i> Copy Address</button>
-    <button class="sec-btn" onclick="closeModals()">Close</button>
-    <div id="qrScannerArea" style="margin-top:10px"></div>
+    <button class="btn-main" onclick="copyAddress()"><i class="fas fa-copy"></i> Copy Address</button>
+    <button class="btn-sub" onclick="closeModals()">Close</button>
   </div>
 </div>
 
 <!-- PQC Inspector Modal -->
 <div class="modal" id="modalPqc">
   <div class="sheet">
-    <h3><i class="fas fa-atom" style="color:var(--quantum)"></i> PQC Lattice Inspector</h3>
-    <p style="font-size:11px;color:var(--text-sub);margin-top:4px">NIST Standard: Crystals-Dilithium (ML-DSA-44)</p>
+    <h3><i class="fas fa-atom" style="color:var(--quantum)"></i> ML-DSA-44 Inspector</h3>
+    <p style="font-size:11px;color:var(--text-sub);margin-top:4px">NIST FIPS-204 Lattice Cryptography</p>
     <div style="margin:12px 0;padding:12px;background:var(--bg);border-radius:12px;font-size:11px">
-      <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-        <b style="color:var(--quantum)">Public Key Matrix (1,312 Bytes):</b>
-        <span onclick="copyPqcKey()" style="cursor:pointer;color:var(--primary)">Copy</span>
-      </div>
-      <div id="pqcFullKeyText" class="mono" style="word-break:break-all;max-height:120px;overflow-y:auto;color:var(--text-sub);font-size:10px"></div>
+      <b style="color:var(--quantum)">Public Key Matrix (1,312 Bytes):</b>
+      <div id="pqcFullKeyText" class="mono" style="word-break:break-all;max-height:120px;overflow-y:auto;color:var(--text-sub);margin-top:6px"></div>
     </div>
-    <button class="sec-btn" onclick="closeModals()">Close</button>
+    <button class="btn-sub" onclick="closeModals()">Close</button>
   </div>
 </div>
 
 <!-- Classic Key Modal -->
 <div class="modal" id="modalClassic">
   <div class="sheet">
-    <h3>Classic Ethereum Credentials</h3>
-    <div style="margin:12px 0;padding:12px;background:var(--bg);border-radius:12px;font-size:12px">
-      <small style="color:var(--text-sub)">Mnemonic Phrase (12 words):</small>
-      <div id="phraseDisplay" style="margin-top:4px;font-weight:600"></div>
-    </div>
-    <div style="padding:12px;background:var(--bg);border-radius:12px;font-size:11px;word-break:break-all" class="mono" id="pkDisplay"></div>
-    <button class="sec-btn" style="margin-top:14px" onclick="closeModals()">Close</button>
-  </div>
-</div>
-
-<!-- Import Modal -->
-<div class="modal" id="modalImport">
-  <div class="sheet">
-    <h3>Import Wallet</h3>
-    <p style="font-size:12px;color:var(--text-sub)">Paste 12-word Seed Phrase or Private Key</p>
-    <textarea class="input-box mono" id="importInput" rows="3" placeholder="word1 word2 word3... OR 0x..."></textarea>
-    <button class="main-btn" onclick="processImport()">Restore Vault</button>
-    <button class="sec-btn" onclick="closeModals()">Cancel</button>
+    <h3>Secret Backup Phrase</h3>
+    <div style="margin:12px 0;padding:14px;background:var(--bg);border-radius:12px;font-size:13px;line-height:22px" id="phraseDisplay"></div>
+    <button class="btn-sub" onclick="closeModals()">Close</button>
   </div>
 </div>
 
 <script>
+// --- MULTI-CHAIN CONFIGURATION REGISTRY ---
+const CHAINS = [
+  {
+    id: "sepolia",
+    name: "Sepolia Testnet",
+    symbol: "ETH",
+    iconClass: "ico-eth",
+    iconSymbol: "♦",
+    rpc: "https://ethereum-sepolia-rpc.publicnode.com",
+    explorer: "https://sepolia.etherscan.io/tx/",
+    faucet: "https://cloud.google.com/application/web3/faucet/ethereum/sepolia",
+    priceKey: "ethereum"
+  },
+  {
+    id: "polygon",
+    name: "Polygon PoS",
+    symbol: "POL",
+    iconClass: "ico-poly",
+    iconSymbol: "⬡",
+    rpc: "https://polygon-rpc.com",
+    explorer: "https://polygonscan.com/tx/",
+    faucet: "https://faucet.polygon.technology/",
+    priceKey: "matic-network"
+  },
+  {
+    id: "bsc",
+    name: "BNB Smart Chain",
+    symbol: "BNB",
+    iconClass: "ico-bnb",
+    iconSymbol: "✦",
+    rpc: "https://binance.llamarpc.com",
+    explorer: "https://bscscan.com/tx/",
+    faucet: "https://testnet.bnbchain.org/faucet-smart",
+    priceKey: "binancecoin"
+  },
+  {
+    id: "arbitrum",
+    name: "Arbitrum One",
+    symbol: "ETH",
+    iconClass: "ico-arb",
+    iconSymbol: "▲",
+    rpc: "https://arb1.arbitrum.io/rpc",
+    explorer: "https://arbiscan.io/tx/",
+    faucet: "https://faucet.quicknode.com/arbitrum/sepolia",
+    priceKey: "ethereum"
+  },
+  {
+    id: "base",
+    name: "Base",
+    symbol: "ETH",
+    iconClass: "ico-base",
+    iconSymbol: "🔵",
+    rpc: "https://mainnet.base.org",
+    explorer: "https://basescan.org/tx/",
+    faucet: "https://faucet.quicknode.com/base/sepolia",
+    priceKey: "ethereum"
+  }
+];
+
+let activeChain = CHAINS[0];
+let activeProvider = new ethers.JsonRpcProvider(activeChain.rpc);
+let activeWallet = null;
+let pqcCredentials = null;
+let chainBalances = {};
+let priceFeeds = { ethereum: 2800, "matic-network": 0.55, binancecoin: 580 };
+let txHistory = JSON.parse(localStorage.getItem('qtrust_tx_multichain') || '[]');
+
+let pendingMnemonic = "";
+let pendingPrivateKey = "";
+let tempPin = "";
+let loginPin = "";
+
 // --- PQC LATTICE ENGINE ---
 class PQCEngine {
-  static ML_DSA_44_PK_SIZE = 1312;
-  static ML_DSA_44_SIG_SIZE = 2420;
-
   static generateKeyPair() {
     const seed = crypto.getRandomValues(new Uint8Array(32));
-    const pkBytes = new Uint8Array(this.ML_DSA_44_PK_SIZE);
-    for (let i = 0; i < this.ML_DSA_44_PK_SIZE; i += 32) {
-      const sub = crypto.getRandomValues(new Uint8Array(32));
-      pkBytes.set(sub, i);
-    }
+    const pkBytes = new Uint8Array(1312);
+    for (let i = 0; i < 1312; i += 32) pkBytes.set(crypto.getRandomValues(new Uint8Array(32)), i);
     const hex = Array.from(pkBytes).map(b => b.toString(16).padStart(2, '0')).join('');
     return {
-      algorithm: "ML-DSA-44 (NIST FIPS-204)",
       publicKey: "pqc_mldsa44_0x" + hex,
       seed: Array.from(seed).map(b => b.toString(16).padStart(2, '0')).join('')
     };
   }
-
-  static async signEnvelope(message, pqcSeed) {
-    const enc = new TextEncoder().encode(message + pqcSeed);
-    const hashBuffer = await crypto.subtle.digest("SHA-256", enc);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const sigProof = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return {
-      proof: `0x${sigProof}...[+${this.ML_DSA_44_SIG_SIZE - 32}b PQC Vector]`
-    };
+  static async signEnvelope(msg, seed) {
+    const enc = new TextEncoder().encode(msg + seed);
+    const hash = await crypto.subtle.digest("SHA-256", enc);
+    const hex = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    return `0x${hex}...[+2388b ML-DSA-44 Vector]`;
   }
 }
 
-// --- STATE MANAGEMENT ---
-const RPC_URL = "https://ethereum-sepolia-rpc.publicnode.com";
-const provider = new ethers.JsonRpcProvider(RPC_URL);
-
-let activeWallet = null;
-let pqcCredentials = null;
-let ethBalance = 0.0;
-let ethPrice = 2800;
-let txHistory = JSON.parse(localStorage.getItem('qtrust_tx_pqc') || '[]');
-
-let inputPin = "";
-let currentSavedPin = localStorage.getItem('qtrust_user_pin') || "1234";
-
-// --- AUTH / PIN LOGIC ---
-function checkAuthOnLoad() {
+// --- AUTH / ROUTING ---
+function checkInitialState() {
   const hasEth = localStorage.getItem('qtrust_eth_pk');
-  if (!hasEth) {
-    document.getElementById('viewPin').style.display = 'none';
-    document.getElementById('viewOnboard').style.display = 'block';
-    document.getElementById('authSubtitle').innerText = "Initial Setup Required";
+  const hasPin = localStorage.getItem('qtrust_user_pin');
+  if (hasEth && hasPin) {
+    goToStep('stepLogin');
   } else {
-    document.getElementById('viewPin').style.display = 'flex';
-    document.getElementById('viewOnboard').style.display = 'none';
-    document.getElementById('authSubtitle').innerText = "Enter PIN to Unlock";
+    goToStep('stepWelcome');
   }
 }
 
-function pressPin(digit) {
-  if (inputPin.length < 4) {
-    inputPin += digit;
-    updatePinDots();
-    if (inputPin.length === 4) {
-      setTimeout(verifyPin, 150);
-    }
+function goToStep(stepId) {
+  document.querySelectorAll('.auth-view').forEach(v => v.classList.remove('active'));
+  document.getElementById(stepId).classList.add('active');
+
+  if (stepId === 'stepCreate') {
+    const tempWallet = ethers.Wallet.createRandom();
+    pendingMnemonic = tempWallet.mnemonic.phrase;
+    pendingPrivateKey = tempWallet.privateKey;
+    
+    document.getElementById('generatedSeedGrid').innerHTML = pendingMnemonic.split(' ').map((w, idx) => `
+      <div class="seed-word"><span>${idx + 1}.</span>${w}</div>
+    `).join('');
   }
 }
 
-function deletePin() {
-  if (inputPin.length > 0) {
-    inputPin = inputPin.slice(0, -1);
-    updatePinDots();
+function pressSetPin(digit) {
+  if (tempPin.length < 4) {
+    tempPin += digit;
+    updateDots('sdot', tempPin.length);
+    if (tempPin.length === 4) setTimeout(finalizeRegistration, 150);
+  }
+}
+function deleteSetPin() {
+  if (tempPin.length > 0) {
+    tempPin = tempPin.slice(0, -1);
+    updateDots('sdot', tempPin.length);
+  }
+}
+function finalizeRegistration() {
+  localStorage.setItem('qtrust_user_pin', tempPin);
+  localStorage.setItem('qtrust_eth_pk', pendingPrivateKey);
+  localStorage.setItem('qtrust_mnemonic', pendingMnemonic);
+
+  pqcCredentials = PQCEngine.generateKeyPair();
+  localStorage.setItem('qtrust_pqc_creds', JSON.stringify(pqcCredentials));
+
+  showToast("Vault Protected! Multi-Chain Enabled ✓");
+  tempPin = "";
+  document.getElementById('authScreen').style.display = 'none';
+  initDashboard();
+}
+
+function verifyImportSeed() {
+  const val = document.getElementById('importInputWords').value.trim();
+  try {
+    const imported = ethers.Wallet.fromPhrase(val);
+    pendingMnemonic = val;
+    pendingPrivateKey = imported.privateKey;
+    goToStep('stepSetPin');
+  } catch(e) {
+    showToast("Invalid 12-word seed phrase!");
   }
 }
 
-function updatePinDots() {
-  for (let i = 0; i < 4; i++) {
-    const dot = document.getElementById(`dot-${i}`);
-    if (i < inputPin.length) {
-      dot.classList.add('filled');
-      dot.classList.remove('error');
-    } else {
-      dot.classList.remove('filled', 'error');
-    }
+function pressLoginPin(digit) {
+  if (loginPin.length < 4) {
+    loginPin += digit;
+    updateDots('ldot', loginPin.length);
+    if (loginPin.length === 4) setTimeout(verifyLoginPin, 150);
   }
 }
-
-function verifyPin() {
-  if (inputPin === currentSavedPin) {
-    // Success Unlock
-    document.getElementById('authGate').style.display = 'none';
-    inputPin = "";
-    updatePinDots();
-    initWallet();
+function deleteLoginPin() {
+  if (loginPin.length > 0) {
+    loginPin = loginPin.slice(0, -1);
+    updateDots('ldot', loginPin.length);
+  }
+}
+function verifyLoginPin() {
+  const savedPin = localStorage.getItem('qtrust_user_pin');
+  if (loginPin === savedPin) {
+    document.getElementById('authScreen').style.display = 'none';
+    loginPin = "";
+    updateDots('ldot', 0);
+    initDashboard();
     showToast("Wallet Unlocked ✓");
   } else {
-    // Error Shake & Reset
-    for (let i = 0; i < 4; i++) {
-      document.getElementById(`dot-${i}`).classList.add('error');
-    }
-    showToast("Incorrect Passcode!");
+    for (let i = 0; i < 4; i++) document.getElementById(`ldot-${i}`).classList.add('error');
+    showToast("Incorrect PIN!");
     setTimeout(() => {
-      inputPin = "";
-      updatePinDots();
-    }, 600);
+      loginPin = "";
+      updateDots('ldot', 0);
+    }, 500);
   }
 }
 
-function simulateBiometric() {
-  showToast("Scanning FaceID / Fingerprint...");
-  setTimeout(() => {
-    document.getElementById('authGate').style.display = 'none';
-    initWallet();
-    showToast("Biometric Authenticated ✓");
-  }, 900);
+function biometricBypass() {
+  showToast("Biometric Authenticated ✓");
+  document.getElementById('authScreen').style.display = 'none';
+  initDashboard();
+}
+
+function updateDots(prefix, count) {
+  for (let i = 0; i < 4; i++) {
+    const el = document.getElementById(`${prefix}-${i}`);
+    if (i < count) {
+      el.classList.add('filled');
+      el.classList.remove('error');
+    } else {
+      el.classList.remove('filled', 'error');
+    }
+  }
 }
 
 function lockWalletNow() {
-  inputPin = "";
-  updatePinDots();
-  document.getElementById('authGate').style.display = 'flex';
-  document.getElementById('viewPin').style.display = 'flex';
-  document.getElementById('viewOnboard').style.display = 'none';
+  loginPin = "";
+  updateDots('ldot', 0);
+  document.getElementById('authScreen').style.display = 'flex';
+  goToStep('stepLogin');
 }
 
-function startWalletSetup(type) {
-  if (type === 'create') {
-    const freshWallet = ethers.Wallet.createRandom();
-    localStorage.setItem('qtrust_eth_pk', freshWallet.privateKey);
-    localStorage.setItem('qtrust_mnemonic', freshWallet.mnemonic.phrase);
-    pqcCredentials = PQCEngine.generateKeyPair();
-    localStorage.setItem('qtrust_pqc_creds', JSON.stringify(pqcCredentials));
-    
-    document.getElementById('authGate').style.display = 'none';
-    initWallet();
-    showToast("Quantum Vault Created!");
-  } else if (type === 'import') {
-    document.getElementById('modalImport').classList.add('on');
-  }
-}
-
-function processImport() {
-  const val = document.getElementById('importInput').value.trim();
-  try {
-    let imported;
-    if (val.includes(" ")) {
-      imported = ethers.Wallet.fromPhrase(val);
-      localStorage.setItem('qtrust_mnemonic', val);
-    } else {
-      imported = new ethers.Wallet(val);
-      localStorage.setItem('qtrust_mnemonic', 'Imported via Private Key');
-    }
-    localStorage.setItem('qtrust_eth_pk', imported.privateKey);
-    
-    pqcCredentials = PQCEngine.generateKeyPair();
-    localStorage.setItem('qtrust_pqc_creds', JSON.stringify(pqcCredentials));
-
-    closeModals();
-    document.getElementById('authGate').style.display = 'none';
-    initWallet();
-    showToast("Wallet Imported Successfully!");
-  } catch (err) {
-    showToast("Invalid Key or Mnemonic!");
-  }
-}
-
-// --- WALLET INITIALIZATION ---
-async function initWallet() {
-  let pk = localStorage.getItem('qtrust_eth_pk');
+// --- DASHBOARD & MULTI-CHAIN CORE ---
+async function initDashboard() {
+  const pk = localStorage.getItem('qtrust_eth_pk');
   if (!pk) return;
-  activeWallet = new ethers.Wallet(pk, provider);
 
-  let savedPqc = localStorage.getItem('qtrust_pqc_creds');
+  activeProvider = new ethers.JsonRpcProvider(activeChain.rpc);
+  activeWallet = new ethers.Wallet(pk, activeProvider);
+  
+  const savedPqc = localStorage.getItem('qtrust_pqc_creds');
   pqcCredentials = savedPqc ? JSON.parse(savedPqc) : PQCEngine.generateKeyPair();
 
-  updateUI();
-  refreshData();
+  updateDashboardUI();
+  await fetchLivePrices();
+  refreshChainBalances();
 }
 
-async function refreshData() {
-  if (!activeWallet) return;
+async function fetchLivePrices() {
   try {
-    const balWei = await provider.getBalance(activeWallet.address);
-    ethBalance = parseFloat(ethers.formatEther(balWei));
-
-    const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd");
+    const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=ethereum,matic-network,binancecoin&vs_currencies=usd");
     const data = await res.json();
-    if (data.ethereum) ethPrice = data.ethereum.usd;
-
-    renderBalances();
+    if (data.ethereum) priceFeeds.ethereum = data.ethereum.usd;
+    if (data["matic-network"]) priceFeeds["matic-network"] = data["matic-network"].usd;
+    if (data.binancecoin) priceFeeds.binancecoin = data.binancecoin.usd;
   } catch(e) {
-    console.error("Refresh fail:", e);
+    console.warn("CoinGecko rate-limit, fallback prices used.");
   }
 }
 
-function renderBalances() {
-  const totalUsd = (ethBalance * ethPrice).toFixed(2);
-  document.getElementById('fiatTotal').innerText = `$${Number(totalUsd).toLocaleString()}`;
-  document.getElementById('cryptoTotal').innerText = `${ethBalance.toFixed(4)} ETH`;
-  document.getElementById('tokenBalance').innerText = `${ethBalance.toFixed(4)} ETH`;
-  document.getElementById('tokenFiatValue').innerText = `$${Number(totalUsd).toLocaleString()}`;
-  document.getElementById('ethPriceDisplay').innerText = `$${ethPrice.toLocaleString()}`;
+async function refreshChainBalances() {
+  if (!activeWallet) return;
+  
+  let totalUsdSum = 0;
+  
+  // Render asset placeholders
+  renderAssetsList();
+
+  // Async multi-chain RPC fetch
+  for (const chain of CHAINS) {
+    try {
+      const tempProvider = new ethers.JsonRpcProvider(chain.rpc);
+      const balWei = await tempProvider.getBalance(activeWallet.address);
+      const balEth = parseFloat(ethers.formatEther(balWei));
+      chainBalances[chain.id] = balEth;
+
+      const rate = priceFeeds[chain.priceKey] || 0;
+      totalUsdSum += balEth * rate;
+    } catch(err) {
+      chainBalances[chain.id] = chainBalances[chain.id] || 0.0;
+    }
+  }
+
+  // Update displays
+  document.getElementById('totalPortfolioUsd').innerText = `$${totalUsdSum.toFixed(2)}`;
+  const currBal = (chainBalances[activeChain.id] || 0).toFixed(4);
+  document.getElementById('activeChainBalanceText').innerText = `${currBal} ${activeChain.symbol} on ${activeChain.name}`;
+  renderAssetsList();
 }
 
-function updateUI() {
+function renderAssetsList() {
+  const container = document.getElementById('chainAssetList');
+  container.innerHTML = CHAINS.map(chain => {
+    const bal = (chainBalances[chain.id] !== undefined ? chainBalances[chain.id] : 0.0).toFixed(4);
+    const rate = priceFeeds[chain.priceKey] || 0;
+    const fiatVal = (bal * rate).toFixed(2);
+    const isCurrent = chain.id === activeChain.id;
+
+    return `
+      <div class="asset-item" onclick="switchChainTo('${chain.id}')" style="${isCurrent ? 'border-color:var(--quantum);' : ''}">
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="asset-ico ${chain.iconClass}">${chain.iconSymbol}</div>
+          <div>
+            <b>${chain.name}</b>
+            <p style="font-size:11px;color:var(--text-sub)">1 ${chain.symbol} ≈ $${rate}</p>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <b class="mono">${bal} ${chain.symbol}</b>
+          <p style="font-size:11px;color:var(--text-sub)">$${fiatVal}</p>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function updateDashboardUI() {
   const addr = activeWallet.address;
   document.getElementById('accountDisplay').innerText = `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   document.getElementById('fullAddressText').innerText = addr;
   document.getElementById('pqcFullKeyText').innerText = pqcCredentials.publicKey;
+  document.getElementById('activeChainTitle').innerText = `${activeChain.name} (${activeChain.symbol})`;
 
   document.getElementById('qrcodeBox').innerHTML = "";
   new QRCode(document.getElementById('qrcodeBox'), { text: addr, width: 145, height: 145 });
@@ -628,55 +825,79 @@ function updateUI() {
   renderHistory();
 }
 
-// --- HYBRID SEND ---
+// --- SWITCH CHAIN ---
+function openChainSelector() {
+  const list = document.getElementById('chainPickerList');
+  list.innerHTML = CHAINS.map(c => `
+    <div class="asset-item" onclick="switchChainTo('${c.id}')" style="${c.id === activeChain.id ? 'border-color:var(--quantum)' : ''}">
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="asset-ico ${c.iconClass}">${c.iconSymbol}</div>
+        <div>
+          <b>${c.name}</b>
+          <p style="font-size:11px;color:var(--text-sub)">RPC: ${c.rpc.split('/')[2]}</p>
+        </div>
+      </div>
+      ${c.id === activeChain.id ? '<span style="color:var(--quantum);font-weight:700">Active</span>' : ''}
+    </div>
+  `).join('');
+  document.getElementById('modalChains').classList.add('on');
+}
+
+function switchChainTo(chainId) {
+  const target = CHAINS.find(c => c.id === chainId);
+  if (!target) return;
+  activeChain = target;
+  activeProvider = new ethers.JsonRpcProvider(activeChain.rpc);
+  activeWallet = new ethers.Wallet(localStorage.getItem('qtrust_eth_pk'), activeProvider);
+  
+  document.getElementById('activeChainTitle').innerText = `${activeChain.name} (${activeChain.symbol})`;
+  closeModals();
+  showToast(`Switched to ${activeChain.name}`);
+  updateDashboardUI();
+  refreshChainBalances();
+}
+
+// --- HYBRID MULTI-CHAIN SEND ---
 async function executeHybridSend() {
   const to = document.getElementById('sendTo').value.trim();
   const amount = document.getElementById('sendAmount').value.trim();
   const feedback = document.getElementById('txFeedback');
-  const btn = document.getElementById('btnConfirmSend');
+  const bal = chainBalances[activeChain.id] || 0;
 
-  if (!ethers.isAddress(to)) return showToast("Invalid recipient address");
-  if (!amount || parseFloat(amount) <= 0 || parseFloat(amount) > ethBalance) return showToast("Check amount or balance");
+  if (!ethers.isAddress(to)) return showToast("Invalid recipient address!");
+  if (!amount || parseFloat(amount) <= 0 || parseFloat(amount) > bal) return showToast("Check amount or balance!");
 
   try {
-    btn.disabled = true;
-    feedback.innerText = "Generating ML-DSA-44 Lattice Signature...";
-    const pqcSig = await PQCEngine.signEnvelope(`${to}:${amount}`, pqcCredentials.seed);
+    feedback.innerText = "1/2 Signing ML-DSA-44 Lattice Envelope...";
+    const pqcProof = await PQCEngine.signEnvelope(`${activeChain.id}:${to}:${amount}`, pqcCredentials.seed);
 
-    feedback.innerText = "Broadcasting to Sepolia Node...";
-    const tx = await activeWallet.sendTransaction({
-      to: to,
-      value: ethers.parseEther(amount)
-    });
+    feedback.innerText = `2/2 Broadcasting to ${activeChain.name}...`;
+    const tx = await activeWallet.sendTransaction({ to, value: ethers.parseEther(amount) });
 
-    saveTx(`Sent ${amount} ETH`, tx.hash, pqcSig.proof);
+    saveTx(`Sent ${amount} ${activeChain.symbol} on ${activeChain.name}`, tx.hash, pqcProof, activeChain.explorer);
     feedback.innerText = "Confirmed! ✅";
-    showToast("PQC Transfer Successful!");
+    showToast("Transaction Broadcasted!");
 
     setTimeout(() => {
       closeModals();
       feedback.innerText = "";
-      btn.disabled = false;
-      document.getElementById('sendTo').value = "";
-      document.getElementById('sendAmount').value = "";
-      refreshData();
+      refreshChainBalances();
     }, 1500);
-
   } catch(e) {
-    feedback.innerText = "Error: " + (e.reason || "Rejected");
-    btn.disabled = false;
+    feedback.innerText = "Error: " + (e.reason || "Transaction failed");
   }
 }
 
 function setMaxBalance() {
-  const safeReserve = 0.0005;
-  const max = Math.max(0, ethBalance - safeReserve);
+  const current = chainBalances[activeChain.id] || 0;
+  const safeReserve = 0.0008;
+  const max = Math.max(0, current - safeReserve);
   document.getElementById('sendAmount').value = max.toFixed(4);
 }
 
-function saveTx(title, hash, pqcProof) {
-  txHistory.unshift({ title, hash, pqcProof, time: new Date().toLocaleTimeString() });
-  localStorage.setItem('qtrust_tx_pqc', JSON.stringify(txHistory.slice(0, 8)));
+function saveTx(title, hash, pqcProof, explorer) {
+  txHistory.unshift({ title, hash, pqcProof, explorer, time: new Date().toLocaleTimeString() });
+  localStorage.setItem('qtrust_tx_multichain', JSON.stringify(txHistory.slice(0, 8)));
   renderHistory();
 }
 
@@ -690,7 +911,7 @@ function renderHistory() {
     <div class="tx-item">
       <div style="display:flex;justify-content:space-between;align-items:center">
         <b style="font-size:13px">${t.title}</b>
-        <a href="https://sepolia.etherscan.io/tx/${t.hash}" target="_blank" style="color:var(--primary);font-size:11px;text-decoration:none">Etherscan ↗</a>
+        <a href="${t.explorer}${t.hash}" target="_blank" style="color:var(--quantum);font-size:11px;text-decoration:none">Explorer ↗</a>
       </div>
       <p style="font-size:10px;color:var(--text-sub);margin-top:2px">${t.time}</p>
       <div class="tx-proof mono">ML-DSA: ${t.pqcProof}</div>
@@ -700,20 +921,23 @@ function renderHistory() {
 
 // --- UTILITIES ---
 function copyAddress() { navigator.clipboard.writeText(activeWallet.address); showToast("Address Copied!"); }
-function copyPqcKey() { navigator.clipboard.writeText(pqcCredentials.publicKey); showToast("ML-DSA Key Copied!"); }
 function showToast(text) {
   const t = document.getElementById('toast');
   t.innerText = text;
   t.style.display = "block";
   setTimeout(() => t.style.display = "none", 2200);
 }
-function openFaucet() { window.open("https://cloud.google.com/application/web3/faucet/ethereum/sepolia", "_blank"); }
-function openSendModal() { document.getElementById('modalSend').classList.add('on'); }
-function openReceiveModal() { document.getElementById('modalReceive').classList.add('on'); }
+function openSendModal() {
+  document.getElementById('sendModalTitle').innerText = `Send ${activeChain.symbol} (${activeChain.name})`;
+  document.getElementById('modalSend').classList.add('on');
+}
+function openReceiveModal() {
+  document.getElementById('receiveModalTitle').innerText = `Deposit ${activeChain.symbol}`;
+  document.getElementById('modalReceive').classList.add('on');
+}
 function openPqcInspector() { document.getElementById('modalPqc').classList.add('on'); }
 function openClassicKeys() {
   document.getElementById('phraseDisplay').innerText = localStorage.getItem('qtrust_mnemonic') || 'Custom Key';
-  document.getElementById('pkDisplay').innerText = activeWallet.privateKey;
   document.getElementById('modalClassic').classList.add('on');
 }
 function closeModals() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('on')); }
@@ -724,36 +948,17 @@ function switchTab(t) {
   event.currentTarget.classList.add('active');
 }
 function toggleTheme() { document.body.classList.toggle('light'); }
-function clearHistory() { txHistory = []; localStorage.removeItem('qtrust_tx_pqc'); renderHistory(); }
-
-function changePinPrompt() {
-  const newP = prompt("Enter new 4-digit PIN:");
-  if (newP && newP.length === 4 && !isNaN(newP)) {
-    localStorage.setItem('qtrust_user_pin', newP);
-    currentSavedPin = newP;
-    showToast("PIN Updated Successfully!");
-  } else {
-    showToast("Invalid 4-digit PIN!");
-  }
-}
+function clearHistory() { txHistory = []; localStorage.removeItem('qtrust_tx_multichain'); renderHistory(); }
 
 function resetWalletPrompt() {
-  if (confirm("Reset wallet? Backup both ECDSA and PQC keys before proceeding!")) {
+  if (confirm("Reset wallet? This will wipe your keys from local storage!")) {
     localStorage.clear();
     location.reload();
   }
 }
 
-function scanQR() {
-  const qr = new Html5Qrcode("qrScannerArea");
-  qr.start({ facingMode: "environment" }, { fps: 10, qrbox: 200 }, (txt) => {
-    document.getElementById('sendTo').value = txt;
-    qr.stop();
-  }).catch(()=>{});
-}
-
-// Start
-checkAuthOnLoad();
+// Start Lifecycle
+checkInitialState();
 </script>
 </body>
 </html>

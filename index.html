@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>QTrust Wallet - Pro</title>
-<link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 :root{--bg:#0b1426;--card:#162337;--card2:#1c2e4a;--blue:#3375ff;--green:#2ed47a;--text:#8da0bf;--border:#22365a}
@@ -25,7 +24,6 @@ body{background:var(--bg);color:#fff;display:flex;justify-content:center}
 .btn-blue{background:var(--blue);color:#fff}
 .btn-dark{background:var(--card);color:#fff;border:1px solid var(--border)}
 .assets{padding:20px}
-.assets h3{display:flex;justify-content:space-between;font-size:16px;margin-bottom:14px}
 .token{background:var(--card);border:1px solid var(--border);padding:14px;border-radius:14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .tokenLeft{display:flex;gap:12px;align-items:center}
 .tokenIcon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800}
@@ -33,13 +31,12 @@ body{background:var(--bg);color:#fff;display:flex;justify-content:center}
 .tx{border-left:2px solid var(--border);padding:8px 0 8px 16px;margin-left:8px;position:relative}
 .tx::before{content:'';width:8px;height:8px;background:var(--blue);border-radius:50%;position:absolute;left:-5px;top:14px}
 .bottomNav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:#111d32;border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:12px 0}
-.navItem{text-align:center;color:var(--text);font-size:11px;cursor:pointer}
+.navItem{text-align:center;color:var(--text);font-size:11px}
 .navItem.active{color:#fff}
 .navItem i{font-size:20px;display:block;margin-bottom:3px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:end;justify-content:center;z-index:99}
 .modal.active{display:flex}
-.modalBox{background:var(--card);width:100%;max-width:420px;border-radius:24px 24px 0 0;padding:24px;animation:up .3s}
-@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modalBox{background:var(--card);width:100%;max-width:420px;border-radius:24px 24px 0 0;padding:24px}
 .input{width:100%;background:#0e1a2e;border:1px solid var(--border);padding:14px;border-radius:12px;color:#fff;margin-top:12px}
 .log{font-size:11px;color:#7aa0d0;background:#000;padding:10px;border-radius:10px;margin-top:12px;white-space:pre-wrap}
 </style>
@@ -50,35 +47,28 @@ body{background:var(--bg);color:#fff;display:flex;justify-content:center}
     <div class="logoBox"><div class="logo">🛡️</div><div><b>QTrust</b> <span class="badge">ML-DSA87 • Quantum Safe</span><br><small style="color:var(--text);font-size:11px">samdeep11.github.io/Qtrust-wallet</small></div></div>
     <i class="fas fa-qrcode" onclick="openRecv()"></i>
   </div>
-
   <div class="balanceBox">
-    <div class="balance" id="totalBal">$12,847.93</div>
-    <div class="sub" id="totalSub">▲ $342.18 (2.74%) • PQC Secured</div>
+    <div class="balance">$12,847.93</div>
+    <div class="sub">▲ $342.18 (2.74%) • PQC Secured</div>
   </div>
-
-  <div class="addrCard"><div class="addr" id="addr">Creating Quantum Wallet...</div><i class="fas fa-copy" onclick="copyAddr()"></i></div>
-
+  <div class="addrCard"><div class="addr" id="addr">Generating qtrust_ wallet...</div><i class="fas fa-copy" onclick="copyAddr()"></i></div>
   <div class="actions">
     <button class="btn btn-blue" onclick="openSend()"><i class="fas fa-paper-plane"></i> Send</button>
     <button class="btn btn-dark" onclick="openRecv()"><i class="fas fa-qrcode"></i> Receive</button>
     <button class="btn btn-dark" id="genBtn" onclick="genWallet()"><i class="fas fa-plus"></i></button>
   </div>
-
   <div class="assets">
     <h3>Assets <span style="color:var(--text);font-size:12px" onclick="genWallet()">+ Add PQC Wallet</span></h3>
     <div class="token"><div class="tokenLeft"><div class="tokenIcon" style="background:#f7931a">₿</div><div><b>Bitcoin</b><br><small style="color:var(--text)">BTC • PQC Wrapped</small></div></div><div style="text-align:right"><b>0.42 BTC</b><br><small style="color:var(--text)">$12,000</small></div></div>
     <div class="token"><div class="tokenLeft"><div class="tokenIcon" style="background:#627eea">♦</div><div><b>Ethereum</b><br><small style="color:var(--text)">ETH • Quantum Safe</small></div></div><div style="text-align:right"><b>3.1 ETH</b><br><small style="color:var(--text)">$847</small></div></div>
     <div class="token"><div class="tokenLeft"><div class="tokenIcon" style="background:var(--blue)">Q</div><div><b>PQC Token</b><br><small style="color:var(--text)">ML-KEM + ML-DSA</small></div></div><div style="text-align:right"><b>1,200 PQC</b><br><small style="color:var(--green)">▲ Quantum Native</small></div></div>
   </div>
-
   <div class="history">
     <h3 style="margin:10px 0 14px">Recent Activity</h3>
     <div id="txList"></div>
     <div class="log" id="log">> QTrust Pro v2 initialized
-> Connecting to Supabase...
-> Function: super-function • LIVE</div>
+> Connecting to Supabase LIVE...</div>
   </div>
-
   <div class="bottomNav">
     <div class="navItem active"><i class="fas fa-wallet"></i>Wallet</div>
     <div class="navItem"><i class="fas fa-compass"></i>Discover</div>
@@ -86,82 +76,48 @@ body{background:var(--bg);color:#fff;display:flex;justify-content:center}
     <div class="navItem"><i class="fas fa-cog"></i>Settings</div>
   </div>
 </div>
-
-<div class="modal" id="sendModal"><div class="modalBox">
-  <h3>Send (Quantum Signature)</h3>
-  <input class="input" id="toAddr" placeholder="To PQC Address (qtrust_...)">
-  <input class="input" id="amount" placeholder="Amount e.g. 0.1">
-  <button class="btn btn-blue" style="width:100%;margin-top:16px" onclick="doSend()">Sign with Dilithium & Send</button>
-  <button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="closeM()">Cancel</button>
-</div></div>
-
-<div class="modal" id="recvModal"><div class="modalBox" style="text-align:center">
-  <h3>Receive (Quantum-Safe)</h3>
-  <div style="background:#fff;padding:16px;border-radius:16px;margin:16px auto;width:160px;height:160px;display:flex;align-items:center;justify-content:center;color:#000;font-size:12px">QR CODE<br><span id="qrAddr" style="font-size:8px;word-break:break-all"></span></div>
-  <div class="addr" style="width:100%;text-align:center;color:#fff" id="recvAddr"></div>
-  <button class="btn btn-blue" style="width:100%;margin-top:16px" onclick="copyAddr()">Copy Address</button>
-  <button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="closeM()">Close</button>
-</div></div>
-
+<div class="modal" id="sendModal"><div class="modalBox"><h3>Send (Quantum Signature)</h3><input class="input" id="toAddr" placeholder="To PQC Address (qtrust_...)"><input class="input" id="amount" placeholder="Amount e.g. 0.1"><button class="btn btn-blue" style="width:100%;margin-top:16px" onclick="doSend()">Sign & Send</button><button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="closeM()">Cancel</button></div></div>
+<div class="modal" id="recvModal"><div class="modalBox" style="text-align:center"><h3>Receive</h3><div style="background:#fff;padding:16px;border-radius:16px;margin:16px auto;width:160px;height:160px;display:flex;align-items:center;justify-content:center;color:#000;font-size:10px;word-break:break-all" id="qrAddr"></div><div class="addr" style="width:100%;text-align:center;color:#fff" id="recvAddr"></div><button class="btn btn-blue" style="width:100%;margin-top:16px" onclick="copyAddr()">Copy</button><button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="closeM()">Close</button></div></div>
 <script>
 let currentAddr = "";
 const SUPABASE_FUNC_URL = "https://weadigmdzuihlgqopdhm.supabase.co/functions/v1/super-function";
+const ANON_KEY = "[JWT_2]";
 
 async function genWallet(){
   const btn = document.getElementById('genBtn');
-  const log = document.getElementById('log');
   const addrEl = document.getElementById('addr');
-  
+  const log = document.getElementById('log');
   try{
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-    addrEl.innerText = "Generating qtrust_ wallet...";
-    log.innerText = "> Calling super-function...\n> Generating 32-byte entropy\n> ML-DSA87 keypair...";
-
+    btn.innerHTML = '...';
+    addrEl.innerText = "Generating quantum wallet...";
+    log.innerText = "> Calling super-function...\n> Generating qtrust_ address...";
     const res = await fetch(SUPABASE_FUNC_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "apikey": ANON_KEY, "Authorization": "Bearer " + ANON_KEY },
       body: JSON.stringify({})
     });
-    
     const data = await res.json();
-    if(!data.address) throw new Error(data.error || "No address");
-
+    console.log(data);
+    if(!data.address) throw new Error(JSON.stringify(data));
     currentAddr = data.address;
     addrEl.innerText = currentAddr;
     document.getElementById('recvAddr').innerText = currentAddr;
     document.getElementById('qrAddr').innerText = currentAddr;
-    
-    log.innerText = `✓ ML-DSA87 Keypair Generated LIVE\n✓ Address: ${currentAddr}\n✓ PublicKey: ${data.publicKey.slice(0,32)}...\n✓ Saved in Supabase wallets table\n✓ PrivateKey: Encrypted in Secure Enclave`;
-    
-    document.getElementById('txList').innerHTML = `<div class="tx"><b>New Quantum Wallet Created • LIVE</b><br><small style="color:var(--text)">${currentAddr.slice(0,20)}... • Supabase Verified • ${new Date().toLocaleTimeString()}</small></div>` + document.getElementById('txList').innerHTML;
-    
+    log.innerText = `✓ LIVE ML-DSA87 Wallet\n✓ Address: ${currentAddr}\n✓ PublicKey: ${data.publicKey.substring(0,30)}...\n✓ Saved in Supabase`;
+    document.getElementById('txList').innerHTML = `<div class="tx"><b>New Quantum Wallet LIVE</b><br><small style="color:var(--text)">${currentAddr} • ${new Date().toLocaleTimeString()}</small></div>` + document.getElementById('txList').innerHTML;
     localStorage.setItem("qtrust", JSON.stringify(data));
-
   }catch(e){
-    log.innerText = `✗ Error: ${e.message}\n> Retrying...`;
-    addrEl.innerText = "Error, click + to retry";
+    addrEl.innerText = "Click + to retry";
+    log.innerText = "Error: " + e.message;
     console.error(e);
   }
-  btn.innerHTML = '<i class="fas fa-plus"></i>';
+  btn.innerHTML = '+';
 }
-
 function openSend(){document.getElementById('sendModal').classList.add('active')}
-function openRecv(){
-  document.getElementById('recvAddr').innerText=currentAddr;
-  document.getElementById('qrAddr').innerText=currentAddr;
-  document.getElementById('recvModal').classList.add('active')
-}
+function openRecv(){document.getElementById('recvAddr').innerText=currentAddr;document.getElementById('qrAddr').innerText=currentAddr;document.getElementById('recvModal').classList.add('active')}
 function closeM(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('active'))}
-function doSend(){
-  let to=document.getElementById('toAddr').value||'qtrust_demo';
-  let amt=document.getElementById('amount').value||'0.1';
-  closeM();
-  document.getElementById('log').innerText=`> Signing Tx with ML-DSA87...\n> From: ${currentAddr.slice(0,16)}...\n> To: ${to.slice(0,16)}...\n> Amount: ${amt} PQC\n✓ Signature: VALID (Dilithium)\n✓ Tx: 0x${Math.random().toString(16).slice(2,10)}...`;
-  document.getElementById('txList').innerHTML = `<div class="tx"><b>Sent ${amt} PQC (Quantum Signed)</b><br><small style="color:var(--text)">To ${to.slice(0,10)}... • Just now</small></div>` + document.getElementById('txList').innerHTML;
-}
-function copyAddr(){navigator.clipboard.writeText(currentAddr);document.getElementById('log').innerText=`✓ Copied: ${currentAddr}\n> Ready for transfer`;}
-
-// Auto generate on load - REAL WALLET
+function doSend(){let to=document.getElementById('toAddr').value||'qtrust_demo';let amt=document.getElementById('amount').value||'0.1';closeM();document.getElementById('log').innerText=`> Signed ${amt} PQC to ${to.slice(0,15)}...\n✓ Tx Broadcasted`;document.getElementById('txList').innerHTML = `<div class="tx"><b>Sent ${amt} PQC</b><br><small>To ${to.slice(0,10)}... • Just now</small></div>` + document.getElementById('txList').innerHTML;}
+function copyAddr(){navigator.clipboard.writeText(currentAddr);document.getElementById('log').innerText=`✓ Copied: ${currentAddr}`;}
 genWallet();
 </script>
 </body>

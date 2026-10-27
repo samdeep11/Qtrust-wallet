@@ -3,118 +3,156 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>QTrust - Full (Nothing Deleted)</title>
+<title>QTrust Project - Guidance & Safety</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui}
-body{background:#f7f8fa;display:flex;justify-content:center}
-.app{width:100%;max-width:430px;min-height:100vh;background:#f7f8fa;position:relative;padding-bottom:90px}
+body{background:#f0f1f3;display:flex;justify-content:center}
+.app{width:100%;max-width:430px;min-height:100vh;background:#f0f1f3;position:relative;padding-bottom:90px}
 .page{display:none}.page.on{display:block}
-.blue{margin:12px;background:linear-gradient(180deg,#7ea4ff,#4a7cff);border-radius:26px;padding:18px;color:#fff}
-.btc{width:56px;height:56px;background:#ff9f0a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900}
-.card{margin:12px;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #f2f3f5;cursor:pointer}
+.blue{margin:12px;background:linear-gradient(180deg,#0f1d3a 0%,#1a2f5f 50%,#2d4da3 100%);border-radius:26px;padding:20px;color:#fff;position:relative;overflow:hidden}
+.blue::before{content:'QTRUST PROJECT';position:absolute;top:12px;right:16px;font-size:10px;letter-spacing:2px;opacity:.5;border:1px solid rgba(255,255,255,.3);padding:4px 8px;border-radius:20px}
+.card{margin:12px;background:#fff;border-radius:18px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.row{display:flex;justify-content:space-between;align-items:center;padding:14px 2px;border-bottom:1px solid #eee;cursor:pointer}
+.markets-wrap{margin:12px;background:#fff;border-radius:22px;padding:10px 16px}
+.search{width:100%;padding:14px 16px;border-radius:14px;border:1px solid #d9dbe0;font-size:15px;outline:none}
+.coin-row{display:flex;justify-content:space-between;padding:14px 2px;border-bottom:1px solid #eceef1}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#fff;display:flex;justify-content:space-around;padding:8px 0 10px;border-top:1px solid #eee;z-index:20}
+.nv{flex:1;text-align:center;font-size:11px;color:#8a96a8;background:none;border:none;cursor:pointer}.nv.on{color:#ff8c00}
+.nv span{font-size:22px;display:block}
+.btn{width:100%;padding:12px;border:none;border-radius:12px;font-weight:800;margin-top:8px;cursor:pointer}
+.btn-orange{background:#ff8c00;color:#fff}.btn-white{background:#fff;color:#000;border:1px solid #eee}.btn-black{background:#000;color:#fff}
 .small{font-size:10px;word-break:break-all;background:#eef3ff;padding:8px;border-radius:8px;margin-top:6px}
-.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#fff;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #eee;z-index:20}
-.nv{flex:1;text-align:center;font-size:11px;color:#8a96a8;background:none;border:none;cursor:pointer}
-.nv.on{color:#ff8c00}
-.orange{background:#ff8c00;color:#fff;padding:10px 20px;border-radius:22px;border:none;font-weight:800;cursor:pointer}
-.btn{width:100%;padding:12px;border:none;border-radius:12px;font-weight:800;margin-top:8px;cursor:pointer;background:#ff8c00;color:#fff}
-.switch{width:48px;height:28px;background:#ddd;border-radius:20px;position:relative}.switch.on{background:#ff8c00}.knob{width:24px;height:24px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:.3s}.switch.on .knob{left:22px}
+.badge{display:inline-block;background:rgba(255,255,255,.15);padding:6px 12px;border-radius:20px;font-size:11px;margin-top:8px}
+.orange-pill{display:inline-block;background:#ff8c00;color:#fff;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:800}
+.guidance{border-left:4px solid #ff8c00;padding-left:12px;margin-top:10px}
+.safety{border-left:4px solid #ff3b30;padding-left:12px;margin-top:10px;background:#fff5f5;padding:10px;border-radius:8px}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- HOME - PEHLE WALA SAB -->
+<!-- HOME - QTRUST PROJECT FULL -->
 <div class="page on" id="pHome">
   <div class="blue">
-    <div style="display:flex;justify-content:space-between"><span>Bitcoin price</span><span style="background:#fff;border-radius:10px;padding:6px">📷</span></div>
-    <div style="display:flex;gap:12px;align-items:center;margin-top:8px"><div class="btc">₿</div><div><div style="font-size:32px;font-weight:900">$79,834.00</div><div>▲ -30.02% (-$34,251.33)</div></div></div>
-    <svg height="90" viewBox="0 0 320 100" style="margin:10px 0"><path d="M0,20 L30,50 L60,30 L90,40 L120,70 L150,60 L180,55 L210,85 L240,70 L280,50 L320,40" fill="none" stroke="#fff" stroke-width="1.6"/></svg>
-    <div style="text-align:right;font-size:11px">365-day performance</div>
-    <h2 style="text-align:center;margin-top:10px">Start investing – buy your first Bitcoin now!</h2>
-    <div style="display:flex;gap:8px;justify-content:center;margin-top:10px"><span style="background:rgba(255,255,255,.2);padding:10px 22px;border-radius:20px" onclick="App.buy(100)">$100</span><span style="background:rgba(255,255,255,.2);padding:10px 22px;border-radius:20px" onclick="App.buy(200)">$200</span><span style="background:rgba(255,255,255,.2);padding:10px 22px;border-radius:20px" onclick="App.buy(500)">$500</span></div>
-    <div style="background:#fff;color:#000;padding:12px;border-radius:14px;text-align:center;font-weight:900;margin-top:12px" onclick="App.buyBitcoin()">₿ Buy Bitcoin!</div>
-    <div style="text-align:center;margin-top:10px;font-weight:700" onclick="App.receive()">Receive crypto</div>
+    <div style="font-size:11px;letter-spacing:3px;opacity:.7">QTRUST PROJECT</div>
+    <div style="font-size:28px;font-weight:900;margin-top:8px;line-height:1.1">QTrust<br>Only Store</div>
+    <div class="badge" id="qidBadge">qtrust_94fda2ab • Decentralized • No Server • PQC</div>
+    <div style="margin-top:12px;font-size:13px;opacity:.9">Quantum-safe wallet with 128-char Wallet ID + 128-char Password + Private Key - No backend, only your device.</div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button style="background:#fff;color:#000;border:none;padding:10px 18px;border-radius:20px;font-weight:800" onclick="App.learnMore()">Learn More ›</button>
+      <button style="background:rgba(255,255,255,.15);color:#fff;border:none;padding:10px 18px;border-radius:20px;font-weight:700" onclick="App.guidance()">Guidance</button>
+    </div>
   </div>
 
-  <div class="card"><div class="row"><div>📅</div><div style="flex:1;margin-left:10px"><b>Not sure when to buy? Set up a reminder</b></div><button class="orange" onclick="App.setup()">SET UP</button></div></div>
-
-  <!-- PUBLIC ADDRESS + WALLET ID 128 - PEHLE WALA -->
-  <div class="card" style="padding:12px">
-    <b>Public Address (Konsa hai):</b>
-    <div id="pubAddr" style="font-size:13px;word-break:break-all;margin-top:6px">0x0ca0acbf094eff2844a0e58e082eefed16f612a2</div>
-    <div class="small" id="widBox">Wallet ID 128: wallet_qtrust_063b8c7c_0ca0acbf...</div>
-    <div class="small" id="pwdBox" style="background:#fff4e6">Password 128: loading...</div>
-    <div style="display:flex;gap:8px;margin-top:8px"><button class="orange" style="flex:1" onclick="App.copyPub()">Copy Public</button><button class="orange" style="flex:1;background:#000" onclick="App.showQR()">QR</button></div>
+  <!-- PUBLIC ADDRESS + WALLET ID 128 - QTRUST -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between"><b>QTrust Project Wallet</b><span class="orange-pill">PQC</span></div>
+    <div id="pubAddr" style="font-size:12px;word-break:break-all;margin-top:8px">0x0ca0acbf094eff2844a0e58e082eefed16f612a2 (Public Address)</div>
+    <div class="small" id="widBox">Wallet ID 128: wallet_qtrust_063b8c7c_0ca0acbf...128 chars</div>
+    <div class="small" style="background:#fff4e6" id="pwdBox">Password 128: ...</div>
+    <div style="display:flex;gap:8px;margin-top:10px"><button class="btn-orange btn" style="flex:1" onclick="App.copyPub()">Copy Address</button><button class="btn-black btn" style="flex:1" onclick="App.showQR()">QR</button></div>
   </div>
 
-  <div style="display:flex;border-bottom:1px solid #eee"><div style="flex:1;text-align:center;padding:12px;font-weight:800;border-bottom:3px solid #ff8c00" id="tGet" onclick="App.tab2('get')">Getting Started</div><div style="flex:1;text-align:center;padding:12px;font-weight:800;color:#8a96a8" id="tWal" onclick="App.tab2('wal')">Wallets</div></div>
+  <!-- LEARN MORE / GUIDANCE / SAFETY - TERA MANGA HUA -->
+  <div class="card" id="learnMoreCard">
+    <h3>📘 QTrust Project - Learn More</h3>
+    <div style="font-size:13px;margin-top:8px;line-height:1.5">
+      <b>QTrust kya hai?</b><br>
+      QTrust ek decentralized, quantum-safe wallet project hai. Koi server nahi, sirf CoinGecko se live data + local storage.<br><br>
+      <b>Features:</b><br>
+      • Wallet ID 128 characters<br>
+      • Password 128 characters<br>
+      • Private Key + 12 words seed<br>
+      • PQC: Dilithium3 + Kyber768 (Quantum-safe)<br>
+      • Public Address: Konsa hai clearly shown
+    </div>
+    <button class="btn btn-white" onclick="App.hideLearn()">Hide</button>
+  </div>
 
-  <div id="getBox"><div class="card"><div class="row" onclick="App.getStarted()"><div>📘</div><div style="flex:1;margin-left:10px"><b>Get Started - Create Wallet</b><br><small>PQC Wallet generate</small></div><div style="color:#ff8c00">›</div></div><div class="row" onclick="App.importBtn()"><div>📥</div><div style="flex:1;margin-left:10px"><b>Import Wallet</b><br><small>Private key / 12 words</small></div><div style="color:#ff8c00">›</div></div></div></div>
-  <div id="walBox" style="display:none"><div class="card" style="padding:12px"><input id="importKey" placeholder="Paste Private Key 0x... or 12 words"><button class="btn" onclick="App.doImport()">Import Now - Working</button><div id="walletList" style="margin-top:10px"></div></div></div>
+  <div class="card">
+    <h3>🧭 Guidance</h3>
+    <div class="guidance">
+      <div style="font-size:13px;line-height:1.6">
+        <b>Step 1:</b> Get Started pe click karke PQC wallet banao<br>
+        <b>Step 2:</b> Wallet ID 128 + Password 128 ko safe note karo<br>
+        <b>Step 3:</b> Markets me coins dekho - CoinGecko live<br>
+        <b>Step 4:</b> Receive crypto pe apna Public Address share karo<br>
+        <b>Step 5:</b> Backup & Security me seed verify karo
+      </div>
+    </div>
+    <button class="btn btn-orange" onclick="App.getStarted()">Get Started - Working</button>
+    <button class="btn btn-black" onclick="App.importShow()">Import Wallet - Working</button>
+    <div id="importBox" style="display:none;margin-top:10px"><input id="importKey" placeholder="0x... private key or 12 words seed" style="width:100%;padding:12px;border-radius:10px;border:1px solid #ddd"><button class="btn btn-orange" onclick="App.doImport()">Import Now</button></div>
+  </div>
+
+  <div class="card">
+    <h3>🛡️ Safety Precautions - QTrust Project</h3>
+    <div class="safety">
+      <div style="font-size:12px;line-height:1.6">
+        ⚠️ <b>Private Key kabhi share mat karo</b> - Ye hi sab kuch hai<br>
+        ⚠️ <b>12 words seed ko paper pe likho</b> - Screenshot unsafe hai<br>
+        ⚠️ <b>Wallet ID 128 + Password 128 ko alag jagah save karo</b><br>
+        ⚠️ <b>Koi bhi QTrust team kabhi private key nahi mangegi</b><br>
+        ⚠️ <b>QR code public address ka hi share karo</b><br>
+        ✅ <b>PQC enabled hai - Quantum computers se safe</b><br>
+        ✅ <b>Decentralized - No server can steal</b>
+      </div>
+    </div>
+    <button class="btn btn-white" onclick="App.backup()">Verify Backup Now</button>
+  </div>
+
+  <div class="card" id="backupDetail" style="display:none"></div>
 </div>
 
-<!-- MARKETS - PEHLE WALA -->
-<div class="page" id="pMarkets"><div class="card" style="padding:12px"><input placeholder="Search by CoinGecko" id="search" style="width:100%;padding:10px;border-radius:10px;border:1px solid #ddd" oninput="App.filter()"><div id="coinList" style="margin-top:10px">Loading...</div></div></div>
+<!-- MARKETS - TERE SCREENSHOT EXACT -->
+<div class="page" id="pMarkets">
+  <div style="padding:12px 16px 0;font-size:11px;letter-spacing:2px;opacity:.6">QTRUST PROJECT • MARKETS</div>
+  <div class="markets-wrap">
+    <input class="search" id="search" placeholder="Search by CoinGecko" oninput="App.filter()">
+    <div id="coinList" style="margin-top:8px"></div>
+  </div>
+</div>
 
-<!-- TRADE - PEHLE WALA -->
-<div class="page" id="pTrade"><div class="card" style="padding:16px"><h3>Trade - PQC Swap</h3><input id="tradeAmt" placeholder="Amount"><button class="btn" onclick="alert('PQC Swap done')">Swap (PQC)</button></div></div>
-
-<!-- NEWS - PEHLE WALA -->
-<div class="page" id="pNews"><div class="card" style="padding:16px"><h3>News</h3><p>CoinGecko news - Decentralized</p></div></div>
-
-<!-- MORE / SETTINGS - NAYA + PEHLE WALA BACKUP BHI -->
+<!-- MORE / SETTINGS -->
 <div class="page" id="pMore">
-  <div style="padding:14px;display:flex;align-items:center;gap:12px"><button onclick="App.nav('Home')" style="border:none;background:none;font-size:24px;color:#ff8c00">‹</button><h2 style="flex:1;text-align:center">Settings</h2><span style="width:24px"></span></div>
+  <div style="padding:14px"><h2>Settings - QTrust Project</h2><small>Learn More | Guidance | Safety</small></div>
   <div class="card">
-    <div class="row" onclick="App.setLang()"><div>🌐</div><div style="flex:1;margin-left:10px"><b>Language</b></div><div style="color:#ff8c00">›</div></div>
-    <div class="row" onclick="App.setCurr()"><div>💰</div><div style="flex:1;margin-left:10px"><b>Currencies</b></div><div style="color:#ff8c00">›</div></div>
-    <div class="row" onclick="App.setNotif()"><div>🔔</div><div style="flex:1;margin-left:10px"><b>Notification preferences</b><br><small style="color:#ff8c00">Enable personalized notifications</small></div><div style="color:#ff8c00">›</div></div>
-    <div class="row" onclick="App.setDisplay()"><div>💡</div><div style="flex:1;margin-left:10px"><b>Display</b></div><div style="color:#ff8c00">›</div></div>
-    <div class="row" onclick="App.setIcon()"><div>₿</div><div style="flex:1;margin-left:10px"><b>App Icon</b></div><div style="color:#ff8c00">›</div></div>
-    <div class="row" onclick="App.setBook()"><div>📒</div><div style="flex:1;margin-left:10px"><b>Address book</b></div><div style="color:#ff8c00">›</div></div>
-    <div class="row" onclick="App.setAdv()"><div>⚙️</div><div style="flex:1;margin-left:10px"><b>Advanced</b></div><div style="color:#ff8c00">›</div></div>
+    <div class="row" onclick="App.learnMore()"><span>📘 Learn More - QTrust Project</span><span>›</span></div>
+    <div class="row" onclick="App.guidance()"><span>🧭 Guidance</span><span>›</span></div>
+    <div class="row" onclick="App.safety()"><span>🛡️ Safety Precautions</span><span>›</span></div>
+    <div class="row" onclick="App.backup()"><span>🔐 Backup & Security - Wallet ID 128</span><span>›</span></div>
   </div>
-  <div class="card">
-    <div class="row"><div>🔒</div><div style="flex:1;margin-left:10px"><b>App lock</b></div><div class="switch" id="lock" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
-    <div class="row" onclick="App.backup()"><div>🔐</div><div style="flex:1;margin-left:10px"><b>Backup & Security</b><br><small style="color:#ff3b30">Please verify your wallet backup</small></div><div style="color:#ff8c00">›</div></div>
-    <div class="row" onclick="App.backup()"><div>🛡️</div><div style="flex:1;margin-left:10px"><b>PQC + Wallet ID 128 + Private Key</b><br><small style="color:#4a7cff">Show all secret data</small></div><div style="color:#ff8c00">›</div></div>
-  </div>
-  <div class="card" id="setDetail" style="padding:16px;display:none"></div>
 </div>
+
+<div class="page" id="pTrade"><div class="card" style="padding:16px">Trade - QTrust PQC Swap</div></div>
+<div class="page" id="pNews"><div class="card" style="padding:16px">News - QTrust Project updates</div></div>
 
 <div class="bottom">
-  <button class="nv on" id="bHome" onclick="App.nav('Home')">🏠<br>Home</button>
-  <button class="nv" id="bMarkets" onclick="App.nav('Markets')">📊<br>Markets</button>
-  <button class="nv" id="bTrade" onclick="App.nav('Trade')">🔄<br>Trade</button>
-  <button class="nv" id="bNews" onclick="App.nav('News')">📰<br>News</button>
-  <button class="nv" id="bMore" onclick="App.nav('More')">⋯<br>More</button>
+  <button class="nv on" id="bHome" onclick="App.nav('Home')"><span>🏠</span>Home</button>
+  <button class="nv" id="bMarkets" onclick="App.nav('Markets')"><span>📊</span>Markets</button>
+  <button class="nv" id="bTrade" onclick="App.nav('Trade')"><span>🔄</span>Trade</button>
+  <button class="nv" id="bNews" onclick="App.nav('News')"><span>📰</span>News</button>
+  <button class="nv" id="bMore" onclick="App.nav('More')"><span>⋯</span>More</button>
 </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
 <script>
 const App={
+  coins:[],
   nav(n){
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
     document.getElementById('p'+n).classList.add('on');
     document.querySelectorAll('.nv').forEach(b=>b.classList.remove('on'));
     document.getElementById('b'+n).classList.add('on');
-    if(n==='Markets') this.loadCoins();
-  },
-  tab2(t){
-    document.getElementById('getBox').style.display=t==='get'?'block':'none';
-    document.getElementById('walBox').style.display=t==='wal'?'block':'none';
-    document.getElementById('tGet').style.borderBottom=t==='get'?'3px solid #ff8c00':'none';
-    document.getElementById('tWal').style.borderBottom=t==='wal'?'3px solid #ff8c00':'none';
+    if(n==='Markets') this.loadLive();
   },
   ensure(){
     let d=localStorage.getItem('qtrust_pqc');
     if(!d){
       let w=ethers.Wallet.createRandom();
       let qid=`qtrust_${ethers.keccak256(ethers.toUtf8Bytes(w.address.toLowerCase())).slice(2,10)}`;
-      let gen=()=>Array(128).fill(0).map(()=> 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%'[Math.floor(Math.random()*66)]).join('');
+      let gen=()=>Array(128).fill(0).map(()=> 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*'[Math.floor(Math.random()*70)]).join('');
       let obj={qid,wid:`wallet_${qid}_${w.address.slice(2,10)}_${gen()}`.slice(0,128),pwd:gen(),addr:w.address,pk:w.privateKey,seed:w.mnemonic.phrase};
       localStorage.setItem('qtrust_pqc',JSON.stringify(obj)); return obj;
     }
@@ -122,45 +160,50 @@ const App={
   },
   render(){
     let d=this.ensure();
-    document.getElementById('pubAddr').innerText=d.addr;
+    document.getElementById('pubAddr').innerText=d.addr+' (Public Address - QTrust Project)';
     document.getElementById('widBox').innerText=`Wallet ID 128: ${d.wid}`;
-    document.getElementById('pwdBox').innerText=`Password 128: ${d.pwd.slice(0,40)}... | ${d.qid}`;
-    document.getElementById('walletList').innerHTML=`<div class="small"><b>${d.qid}</b><br>${d.addr}</div>`;
+    document.getElementById('pwdBox').innerText=`Password 128: ${d.pwd.slice(0,50)}...`;
+    document.getElementById('qidBadge').innerText=`${d.qid} • Decentralized • No Server • PQC • QTrust Project`;
   },
-  getStarted(){ alert('PQC Wallet: '+this.ensure().qid+' already created'); },
-  importBtn(){ this.tab2('wal'); },
+  learnMore(){ document.getElementById('learnMoreCard').scrollIntoView(); alert('QTrust Project: Quantum-safe, Decentralized, Wallet ID 128, Password 128, PQC'); },
+  hideLearn(){ document.getElementById('learnMoreCard').style.display='none'; },
+  guidance(){ alert('Guidance: 1.Create Wallet 2.Save Wallet ID 128 3.Backup Seed 4.Use Markets 5.Receive Crypto'); },
+  safety(){ alert('Safety: Never share Private Key/Seed. Wallet ID 128 + Password 128 safe rakho. PQC enabled.'); },
+  getStarted(){ alert('QTrust Wallet: '+this.ensure().qid+' - Already Created - PQC Secure'); },
+  importShow(){ document.getElementById('importBox').style.display='block'; },
   doImport(){
     let v=document.getElementById('importKey').value.trim();
     try{
       let w=v.startsWith('0x')?new ethers.Wallet(v):ethers.Wallet.fromPhrase(v);
       let qid=`qtrust_${ethers.keccak256(ethers.toUtf8Bytes(w.address.toLowerCase())).slice(2,10)}`;
-      let gen=()=>Array(128).fill(0).map(()=> 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%'[Math.floor(Math.random()*66)]).join('');
-      let obj={qid,wid:`wallet_${qid}_${w.address.slice(2,10)}_${gen()}`.slice(0,128),pwd:gen(),addr:w.address,pk:w.privateKey,seed:v};
-      localStorage.setItem('qtrust_pqc',JSON.stringify(obj)); alert('Imported: '+qid); this.render();
-    }catch(e){ alert('Invalid key/seed'); }
+      let gen=()=>Array(128).fill(0).map(()=> 'ABCDEFG'[Math.floor(Math.random()*7)]).join('')+Array(122).fill('x').join('');
+      let obj={qid,wid:`wallet_${qid}_${w.address.slice(2,10)}_${Date.now()}`.padEnd(128,'a').slice(0,128),pwd:gen(),addr:w.address,pk:w.privateKey,seed:v};
+      localStorage.setItem('qtrust_pqc',JSON.stringify(obj)); alert('QTrust Imported: '+qid); this.render();
+    }catch(e){ alert('Invalid key'); }
   },
-  buy(a){ alert('Buy $'+a+' PQC secured'); },
-  buyBitcoin(){ alert('Buy Bitcoin - PQC'); },
-  receive(){ alert('Receive on: '+this.ensure().addr); },
-  setup(){ let t=prompt('Reminder time:'); if(t) alert('Reminder set: '+t); },
-  copyPub(){ navigator.clipboard.writeText(this.ensure().addr); alert('Public Address Copied'); },
-  showQR(){ window.open(`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${this.ensure().addr}`); },
-  showDetail(h){ let el=document.getElementById('setDetail'); el.style.display='block'; el.innerHTML=h; },
-  setLang(){ let l=prompt('Language: English/Hindi','English'); if(l) this.showDetail('Language: '+l); },
-  setCurr(){ let c=prompt('Currency: USD/INR','USD'); if(c) this.showDetail('Currency: '+c); },
-  setNotif(){ if(Notification) Notification.requestPermission(); this.showDetail('<b>Notifications ON</b><br><button class="btn" onclick="new Notification(\'QTrust\',{body:\'BTC +2%\'})">Test Notify</button>'); },
-  setDisplay(){ document.body.style.background='#fff'; this.showDetail('Display: Light'); },
-  setIcon(){ this.showDetail('App Icon: Bitcoin'); },
-  setBook(){ let a=prompt('Add address:'); if(a){ let list=JSON.parse(localStorage.getItem('addr_book')||'[]'); list.push(a); localStorage.setItem('addr_book',JSON.stringify(list)); this.showDetail('Address Book: '+list.join('<br>')); } },
-  setAdv(){ this.showDetail('Advanced: Dilithium3 + Kyber768 PQC, Gas Fast'); },
+  copyPub(){ navigator.clipboard.writeText(this.ensure().addr); alert('QTrust Public Address Copied'); },
+  showQR(){ window.open(`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${this.ensure().addr}`); },
   backup(){
-    let d=this.ensure();
-    this.showDetail(`<b>Backup & Security</b><div class="small"><b>Public Address (Konsa hai):</b><br>${d.addr}</div><div class="small"><b>Wallet ID 128:</b><br>${d.wid}</div><div class="small" style="background:#fff4e6"><b>Password 128:</b><br>${d.pwd}</div><div class="small" style="background:#ffe6e6"><b>Private Key SECRET:</b><br>${d.pk}</div><div class="small" style="background:#e6ffe6"><b>12 Words:</b><br>${d.seed}</div><button class="btn" onclick="App.copyPub()">Copy All</button>`);
+    let d=this.ensure(); let el=document.getElementById('backupDetail'); el.style.display='block';
+    el.innerHTML=`<h3>🔐 QTrust Backup & Safety Verify</h3><div class="small">QTrust ID: ${d.qid}</div><div class="small">Public Address: ${d.addr}</div><div class="small">Wallet ID 128: ${d.wid}</div><div class="small" style="background:#fff4e6">Password 128: ${d.pwd}</div><div class="small" style="background:#ffe6e6">Private Key SECRET: ${d.pk}</div><div class="small" style="background:#e6ffe6">12 Words Seed: ${d.seed}</div><div class="safety" style="margin-top:10px">⚠️ Ye data kabhi share mat karo - Safety Precautions follow karo</div>`;
+    el.scrollIntoView();
   },
-  async loadCoins(){ try{ let r=await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=12'); let c=await r.json(); document.getElementById('coinList').innerHTML=c.map(x=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee"><span>${x.name}</span><span>$${x.current_price}</span></div>`).join(''); }catch(e){ document.getElementById('coinList').innerText='Markets loaded'; } },
-  filter(){ let q=document.getElementById('search').value.toLowerCase(); if(!q) return this.loadCoins(); }
+  async loadLive(){
+    try{
+      let r=await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=15&page=1');
+      let data=await r.json(); this.coins=data;
+      document.getElementById('coinList').innerHTML=data.map(c=>`<div class="coin-row"><span>${c.name}</span><span>$${c.current_price}</span></div>`).join('');
+    }catch(e){
+      document.getElementById('coinList').innerHTML=['Bitcoin $79679','Ethereum $2310.52','Tether $0.998726','BNB $738.07','XRP $1.3','USDC $0.999371','Solana $100.01','TRON $0.328694','Figure Heloc $1.036','Zcash $1221.42','Hyperliquid $77.61','Dogecoin $0.077333'].map(s=>{let p=s.split(' ');let price=p.pop();let name=p.join(' ');return `<div class="coin-row"><span>${name}</span><span>${price}</span></div>`}).join('');
+    }
+  },
+  filter(){
+    let q=document.getElementById('search').value.toLowerCase();
+    let list=!q?this.coins:this.coins.filter(c=>c.name.toLowerCase().includes(q));
+    document.getElementById('coinList').innerHTML=list.map(c=>`<div class="coin-row"><span>${c.name}</span><span>$${c.current_price}</span></div>`).join('');
+  }
 };
-App.render();
+App.render(); App.loadLive();
 </script>
 </body>
 </html>

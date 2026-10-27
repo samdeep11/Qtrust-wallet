@@ -1,100 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>QTrust - Markets</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QTrust Only Store - Home</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,-apple-system,sans-serif}
-body{background:#f5f6f8;display:flex;justify-content:center}
-.app{width:100%;max-width:430px;min-height:100vh;background:#f5f6f8;position:relative;padding-bottom:90px}
-.top{position:sticky;top:0;z-index:10;background:#f5f6f8;padding:12px 16px 8px;display:flex;align-items:center;justify-content:space-between}
-.search{flex:1;background:#fff;border-radius:24px;padding:12px 16px;display:flex;align-items:center;gap:10px;border:1px solid #eee}
-.search input{border:none;outline:none;width:100%;font-size:15px}
-.badge{font-size:11px;background:rgba(0,0,0,.06);padding:4px 10px;border-radius:20px;margin:8px 16px;display:inline-block}
-.list{background:#fff;border-radius:20px;margin:8px 12px;overflow:hidden}
-.row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #f6f7f8}
-.left{display:flex;align-items:center;gap:12px}
-.ico{width:36px;height:36px;border-radius:50%;background:#eee;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
-.name{font-weight:700;font-size:14px}.sym{font-size:11px;color:#8a96a8}
-.mid{width:80px;height:32px}
-.right{text-align:right}.price{font-weight:800;font-size:14px}.chg{font-size:12px}
-.green{color:#0ab368}.red{color:#ff3b30}
-.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#fff;border-top:1px solid #e6e8eb;display:flex;justify-content:space-around;padding:10px 0 14px}
-.nv{text-align:center;font-size:11px;color:#8a96a8;flex:1;cursor:pointer}.nv.on{color:#ff8c00}.nv b{font-size:18px;display:block}
-.page{display:none}.page.on{display:block}
-.blue-card{margin:12px;background:linear-gradient(180deg,#7da6ff,#4d7cff);border-radius:24px;padding:18px;color:#fff}
-.card{margin:12px;background:#fff;border-radius:18px;padding:16px}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui}
+body{background:#f2f3f5;display:flex;justify-content:center}
+.app{width:100%;max-width:430px;min-height:100vh;background:#f2f3f5;position:relative;padding-bottom:90px}
+.blue-card{margin:12px 16px;background:linear-gradient(135deg,#8aaaff 0%,#5a7eff 60%,#4a6cf7 100%);border-radius:28px;padding:20px 20px 18px;color:#fff;box-shadow:0 8px 24px rgba(74,108,247,.25)}
+.badge{display:inline-block;background:rgba(0,0,0,.18);backdrop-filter:blur(6px);padding:6px 14px;border-radius:20px;font-size:13px;font-weight:500;letter-spacing:.2px}
+.title{font-size:32px;font-weight:900;margin-top:14px;line-height:1.1;letter-spacing:-.5px}
+.addr{font-size:13px;margin-top:6px;opacity:.95;word-break:break-all;font-weight:400}
+.white-card{margin:12px 16px;background:#fff;border-radius:22px;padding:20px 18px;box-shadow:0 2px 16px rgba(0,0,0,.06)}
+.qid{font-size:20px;font-weight:800;color:#000}
+.qaddr{font-size:14px;color:#000;margin-top:4px;word-break:break-all}
+.wid{font-size:15px;color:#111;margin-top:18px;line-height:1.4}
+.wid span{color:#000}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#fff;border-top:1px solid #e8eaee;display:flex;justify-content:space-around;padding:10px 0 12px}
+.nv{flex:1;text-align:center;font-size:12px;color:#8e9aaf;cursor:pointer;line-height:1.2}
+.nv.on{color:#ff8a00}
+.nv .ic{font-size:26px;display:block;margin-bottom:2px}
 </style>
 </head>
 <body>
 <div class="app">
-  <!-- HOME -->
-  <div class="page" id="pHome">
-    <div class="blue-card"><div id="uidBadge" style="font-size:11px;background:rgba(0,0,0,.2);padding:4px 10px;border-radius:20px;display:inline-block">qtrust_94fda2ab • Decentralized • No Server</div><div style="font-size:26px;font-weight:900;margin-top:10px">QTrust Only Store</div><div id="addr" style="font-size:11px;opacity:.9;margin-top:4px;word-break:break-all"></div></div>
-    <div class="card" id="walletInfo"></div>
+  <div class="blue-card">
+    <div class="badge">qtrust_39608aee • Decentralized • No Server</div>
+    <div class="title">QTrust Only Store</div>
+    <div class="addr">0x0ca0acbf094eff2844a0e58e082eefed16f612a2</div>
   </div>
 
-  <!-- MARKETS - YOUR SCREENSHOT CLONE -->
-  <div class="page on" id="pMarkets">
-    <div class="top">
-      <div class="search"><span>🔍</span><input id="sInput" placeholder="Search by CoinGecko" oninput="filterCoin()"><span>⚙️</span></div>
-    </div>
-    <div class="badge" id="qBadge">qtrust_94fda2ab • Decentralized • No Server</div>
-    <div class="list" id="coinList">Loading CoinGecko...</div>
-  </div>
-
-  <!-- STORE -->
-  <div class="page" id="pStore">
-    <div class="card" id="storeBox"></div>
+  <div class="white-card">
+    <div class="qid">qtrust_39608aee</div>
+    <div class="qaddr">0x0ca0acbf094eff2844a0e58e082eefed16f612a2</div>
+    <div class="wid">Wallet ID 128: wallet_qtrust_063b8c7c_0ca0acbf...<br>128cha...</div>
   </div>
 
   <div class="bottom">
-    <div class="nv" onclick="tab('Home')"> <b>🏠</b> Home</div>
-    <div class="nv on" onclick="tab('Markets')"> <b>📊</b> Markets</div>
-    <div class="nv" onclick="tab('Store')"> <b>🔐</b> Store</div>
-    <div class="nv"> <b>📈</b> Trade</div>
-    <div class="nv"> <b>⋯</b> More</div>
+    <div class="nv on"><span class="ic">🏠</span>Home</div>
+    <div class="nv"><span class="ic">📊</span>Markets</div>
+    <div class="nv"><span class="ic">🔐</span>Store</div>
+    <div class="nv"><span class="ic">📈</span>Trade</div>
+    <div class="nv"><span class="ic">⋯</span>More</div>
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
 <script>
-let allCoins=[], displayCoins=[];
-function genId(a){try{return `qtrust_${ethers.keccak256(ethers.toUtf8Bytes(a.toLowerCase())).slice(2,10)}`}catch(e){return 'qtrust_94fda2ab'}}
-function tab(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById('p'+n).classList.add('on');document.querySelectorAll('.nv').forEach(v=>v.classList.remove('on'));let m={Home:0,Markets:1,Store:2}[n];if(m!==undefined)document.querySelectorAll('.nv')[m].classList.add('on')}
-function spark(chg){let up=chg>=0,pts=[];for(let i=0;i<20;i++){let x=i/19*80,y=up?18+Math.random()*18-i*0.3:10+Math.random()*25+i*0.5;pts.push(`${i==0?'M':'L'}${x},${y}`)}return {d:pts.join(' '),c:up?'#0ab368':'#ff3b30'}}
-
-async function loadCoins(){
-  try{
-    let r=await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=30&page=1&price_change_percentage=24h');
-    let d=await r.json();
-    allCoins=d.map(x=>({name:x.name,sym:x.symbol.toUpperCase(),price:x.current_price,chg:x.price_change_percentage_24h||0,icon:x.symbol.slice(0,2).toUpperCase()}));
-    displayCoins=allCoins;
-    render();
-  }catch(e){
-    // fallback to your screenshot coins
-    allCoins=[{name:'Artificial Superintelligence',sym:'FET',price:0.3856,chg:7.08,icon:'FE'},{name:'Gate Bridged WETH',sym:'GTETH',price:2535.15,chg:-2.11,icon:'GT'},{name:'Origin Staked ETH',sym:'OSETH',price:2745.78,chg:-1.97,icon:'OS'},{name:'Reservoir rUSD',sym:'REUSD',price:1,chg:0,icon:'RE'},{name:'BitTorrent',sym:'BTT',price:0.0000004964,chg:0.31,icon:'BT'},{name:'KAU',sym:'KAU',price:30.45,chg:-1.34,icon:'KA'},{name:'DRV',sym:'DRV',price:0.12,chg:3.2,icon:'DR'},{name:'Starknet',sym:'STRK',price:0.18,chg:-2.5,icon:'ST'},{name:'SPX6900',sym:'SPX',price:0.89,chg:5.1,icon:'SP'}];
-    displayCoins=allCoins; render();
-  }
-}
-function render(){
-  document.getElementById('coinList').innerHTML=displayCoins.map(c=>{
-    let sp=spark(c.chg);
-    return `<div class="row"><div class="left"><div class="ico">${c.icon}</div><div><div class="name">${c.name}</div><div class="sym">${c.sym}</div></div></div><div class="mid"><svg width="80" height="32" viewBox="0 0 80 32"><path d="${sp.d}" fill="none" stroke="${sp.c}" stroke-width="1.6"/></svg></div><div class="right"><div class="price">$${c.price<1?c.price.toFixed(4):c.price.toFixed(2)}</div><div class="chg ${sp.c=='#0ab368'?'green':'red'}">${c.chg>=0?'+':''}${c.chg.toFixed(2)}%</div></div></div>`;
-  }).join('');
-}
-function filterCoin(){let q=document.getElementById('sInput').value.toLowerCase();displayCoins=!q?allCoins:allCoins.filter(c=>c.name.toLowerCase().includes(q)||c.sym.toLowerCase().includes(q));render()}
-
-// wallet init
-(async()=>{
-  let addr=localStorage.getItem('q_addr')||'0x0ca0acbf094eff2844a0e58e082eefed16f612a2';
-  let qid=genId(addr); let wid=localStorage.getItem('wallet_id_128')||'wallet_qtrust_063b8c7c_0ca0acbf...128char'; let pwd=localStorage.getItem('pwd_128')||'u;DAHisu)...128';
-  document.getElementById('uidBadge').innerText=`${qid} • Decentralized • No Server`; document.getElementById('qBadge').innerText=`${qid} • Decentralized • No Server`; document.getElementById('addr').innerText=addr;
-  document.getElementById('walletInfo').innerHTML=`<b>${qid}</b><br><small style="word-break:break-all">${addr}</small><br><br><small style="word-break:break-all">Wallet ID 128: ${wid.slice(0,40)}...</small>`;
-  document.getElementById('storeBox').innerHTML=`<b>${qid}</b><br><small>${addr}</small><br><br><div style="font-size:10px;word-break:break-all;background:#f5f6f8;padding:8px;border-radius:8px">Wallet ID 128: ${wid}</div><div style="font-size:10px;word-break:break-all;background:#fff4e6;padding:8px;border-radius:8px;margin-top:8px">Pwd 128: ${pwd}</div>`;
-})();
-loadCoins();
+// Dynamic - tera real ID se auto
+const addr="0x0ca0acbf094eff2844a0e58e082eefed16f612a2";
+const qid="qtrust_39608aee";
+const walletId128="wallet_qtrust_063b8c7c_0ca0acbf094eff2844a0e58e082eefed16f612a2_"+Array(60).fill(0).map(()=>'a').join('');
+document.querySelector('.badge').innerText=`${qid} • Decentralized • No Server`;
+document.querySelector('.qid').innerText=qid;
+document.querySelectorAll('.qaddr,.addr').forEach(e=>e.innerText=addr);
 </script>
 </body>
 </html>

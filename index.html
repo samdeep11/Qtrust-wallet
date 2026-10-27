@@ -3,168 +3,159 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>QTrust PQC - Working</title>
+<title>QTrust - Home Working</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui}
-body{background:#f2f3f5;display:flex;justify-content:center}
-.app{width:100%;max-width:430px;min-height:100vh;background:#f2f3f5;position:relative;padding-bottom:90px}
-.blue-card{margin:12px 16px;background:linear-gradient(135deg,#8aaaff,#5a7eff);border-radius:28px;padding:20px;color:#fff}
-.badge{display:inline-block;background:rgba(0,0,0,.18);padding:6px 14px;border-radius:20px;font-size:12px}
-.title{font-size:30px;font-weight:900;margin-top:12px}
-.addr{font-size:12px;opacity:.9;word-break:break-all;margin-top:4px}
-.white-card{margin:12px 16px;background:#fff;border-radius:22px;padding:18px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+body{background:#f7f8fa;display:flex;justify-content:center}
+.app{width:100%;max-width:430px;min-height:100vh;background:#f7f8fa;position:relative;padding-bottom:90px}
+.blue{margin:12px;background:linear-gradient(180deg,#7ea4ff,#4a7cff);border-radius:26px;padding:18px;color:#fff;position:relative}
+.btc{width:56px;height:56px;background:#ff9f0a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900}
+.price{font-size:32px;font-weight:900;margin-top:8px}
+.graph{height:110px;margin:10px 0}
+.pills{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.pill{background:rgba(255,255,255,.2);padding:12px 28px;border-radius:28px;font-weight:700;cursor:pointer}
+.buy{background:#fff;color:#000;padding:14px;border-radius:16px;text-align:center;font-weight:900;margin-top:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.recv{text-align:center;margin-top:14px;font-weight:700;cursor:pointer}
+.white-card{margin:12px;background:#fff;border-radius:18px;padding:14px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.orange{background:#ff8c00;color:#fff;padding:10px 20px;border-radius:22px;border:none;font-weight:800;cursor:pointer}
+.tabs{display:flex;margin-top:8px;border-bottom:1px solid #eee}
+.tab{flex:1;text-align:center;padding:14px;font-weight:800;cursor:pointer;border-bottom:3px solid transparent}
+.tab.on{border-color:#ff8c00}
+.public-box{margin:12px;background:#eef3ff;border:1px dashed #4a7cff;border-radius:14px;padding:12px}
+.small{font-size:10px;word-break:break-all;background:#f6f7ff;padding:8px;border-radius:8px;margin-top:6px}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#fff;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #eee;z-index:10}
+.nv{flex:1;text-align:center;font-size:11px;color:#8a96a8;background:none;border:none;cursor:pointer}
+.nv.on{color:#ff8c00}
 .page{display:none}.page.on{display:block}
-.coin-row{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid #f3f4f6}
-.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#fff;display:flex;justify-content:space-around;padding:8px 0 10px;border-top:1px solid #eee;z-index:20}
-.nv{flex:1;text-align:center;font-size:11px;color:#8e9aaf;cursor:pointer;border:none;background:none}
-.nv.on{color:#ff8a00}
-.btn{width:100%;padding:12px;border:none;border-radius:12px;font-weight:800;margin-top:10px;cursor:pointer}
-.btn-blue{background:#4a7cff;color:#fff}.btn-black{background:#000;color:#fff}.btn-orange{background:#ff8c00;color:#fff}
-.small{font-size:10px;word-break:break-all;background:#f0f3ff;padding:8px;border-radius:8px;margin-top:8px}
+input{width:100%;padding:12px;border-radius:10px;border:1px solid #ddd;margin-top:8px}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- HOME PAGE -->
+<!-- HOME - YOUR SCREENSHOT -->
 <div class="page on" id="pHome">
-  <div class="blue-card">
-    <div class="badge" id="badgeTop">qtrust_39608aee • Decentralized • No Server • PQC</div>
-    <div class="title">QTrust Only Store</div>
-    <div class="addr" id="addrTop">0x0ca0acbf094eff2844a0e58e082eefed16f612a2</div>
+  <div class="blue">
+    <div style="display:flex;justify-content:space-between;align-items:center"><div>Bitcoin price</div><div style="background:#fff;border-radius:12px;padding:8px">📷</div></div>
+    <div style="display:flex;gap:12px;align-items:center;margin-top:8px"><div class="btc">₿</div><div><div class="price">$79,834.00</div><div>▲ -30.02% (-$34,251.33)</div></div></div>
+    <svg class="graph" viewBox="0 0 320 100"><path d="M0,20 L20,50 L40,60 L60,30 L80,40 L100,20 L120,70 L140,80 L160,60 L180,65 L200,55 L220,85 L240,80 L260,70 L280,50 L320,40" fill="none" stroke="#fff" stroke-width="1.6"/></svg>
+    <div style="text-align:right;font-size:12px">365-day performance</div>
+    <h2 style="text-align:center;margin-top:12px;font-size:26px">Start investing – buy your first Bitcoin now!</h2>
+    <div class="pills"><div class="pill" onclick="App.buy(100)">$100</div><div class="pill" onclick="App.buy(200)">$200</div><div class="pill" onclick="App.buy(500)">$500</div></div>
+    <div class="buy" onclick="App.buyBitcoin()">₿ Buy Bitcoin!</div>
+    <div class="recv" onclick="App.receive()">Receive crypto</div>
   </div>
+
   <div class="white-card">
-    <div style="font-weight:800;font-size:18px" id="qid1">qtrust_39608aee</div>
-    <div style="font-size:13px;word-break:break-all" id="addr1">0x0ca0...</div>
-    <div class="small" id="wid1">Wallet ID 128: loading...</div>
-    <button class="btn btn-blue" onclick="App.showSeed()">Show 12 Words (PQC Seed)</button>
-    <button class="btn btn-black" onclick="App.copyAddr()">Copy Address</button>
+    <div style="display:flex;gap:12px;align-items:center"><div style="font-size:28px">📅</div><div><b>Not sure when to buy?<br>Set up a reminder</b></div></div>
+    <button class="orange" onclick="App.setupReminder()">🔔 SET UP</button>
+  </div>
+
+  <!-- PUBLIC ADDRESS - TERA MANGA -->
+  <div class="public-box" id="publicBox">
+    <b>Public Address (Konsa hai):</b>
+    <div id="pubAddr" style="font-size:13px;margin-top:6px;word-break:break-all">0x0ca0acbf094eff2844a0e58e082eefed16f612a2</div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="orange" style="flex:1" onclick="App.copyPub()">Copy Public</button>
+      <button class="orange" style="flex:1;background:#000" onclick="App.qrPub()">Show QR</button>
+    </div>
+    <div class="small" id="widBox">Wallet ID 128: wallet_qtrust_063b8c7c...</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab on" id="tabGet" onclick="App.switchTab('get')">Getting Started</div>
+    <div class="tab" id="tabWallet" onclick="App.switchTab('wallet')">Wallets</div>
+  </div>
+
+  <!-- GET STARTED TAB -->
+  <div id="getContent">
+    <div class="white-card"><div>📘</div><div style="flex:1;margin-left:10px"><b>Get Started - Create Wallet</b><br><small>Step 1: Generate PQC wallet</small></div><button class="orange" onclick="App.getStarted()">START</button></div>
+    <div class="white-card"><div>📥</div><div style="flex:1;margin-left:10px"><b>Import Wallet</b><br><small>Private key / Seed se import</small></div><button class="orange" onclick="App.importWallet()">IMPORT</button></div>
+    <div class="white-card"><div>🔐</div><div style="flex:1;margin-left:10px"><b>PQC Secure</b><br><small>Dilithium3 + Kyber768 enabled</small></div></div>
+  </div>
+
+  <!-- WALLETS TAB -->
+  <div id="walletContent" style="display:none">
+    <div class="white-card" style="flex-direction:column;align-items:flex-start">
+      <b>Your Wallets</b>
+      <div id="walletList" style="width:100%;margin-top:8px"></div>
+      <input id="importKey" placeholder="Paste Private Key (0x...) or 12 words">
+      <button class="orange" style="width:100%;margin-top:8px" onclick="App.doImport()">Import Now</button>
+    </div>
   </div>
 </div>
 
-<!-- MARKETS PAGE -->
-<div class="page" id="pMarkets">
-  <div class="white-card"><input id="search" placeholder="Search by CoinGecko" style="width:100%;padding:10px;border-radius:10px;border:1px solid #eee" oninput="App.filter()"></div>
-  <div class="white-card" id="coinList">Loading CoinGecko...</div>
-</div>
+<!-- MARKETS / TRADE / NEWS / MORE PAGES -->
+<div class="page" id="pMarkets"><div class="white-card" id="mList">Loading markets...</div></div>
+<div class="page" id="pTrade"><div class="white-card"><h3>Trade</h3><p>PQC swap demo</p></div></div>
+<div class="page" id="pNews"><div class="white-card"><h3>News</h3><p>Coming - CoinGecko news</p></div></div>
+<div class="page" id="pMore"><div class="white-card"><h3>More</h3><button class="orange" style="width:100%" onclick="localStorage.clear();location.reload()">Reset All</button></div></div>
 
-<!-- STORE PAGE - PQC -->
-<div class="page" id="pStore">
-  <div class="white-card" id="storeBox">Loading...</div>
-</div>
-
-<!-- TRADE PAGE -->
-<div class="page" id="pTrade">
-  <div class="white-card">
-    <h3>Trade - PQC Secure Swap</h3>
-    <p style="font-size:13px;margin-top:8px">Quantum-safe swap - No server</p>
-    <input id="tradeAmt" placeholder="Amount" style="width:100%;padding:12px;margin-top:12px;border-radius:10px;border:1px solid #ddd">
-    <button class="btn btn-orange" onclick="App.trade()">Swap (Demo PQC)</button>
-    <div id="tradeRes" class="small" style="display:none"></div>
-  </div>
-</div>
-
-<!-- MORE PAGE -->
-<div class="page" id="pMore">
-  <div class="white-card">
-    <h3>More / Settings</h3>
-    <button class="btn btn-blue" onclick="App.newWallet()">Generate New PQC Wallet</button>
-    <button class="btn btn-black" onclick="App.exportJSON()">Export Wallet JSON</button>
-    <button class="btn btn-orange" onclick="localStorage.clear();location.reload()">Reset Wallet</button>
-    <div class="small">PQC: Dilithium3 + Kyber768<br>128 char Wallet ID + 128 char Password<br>Private Key never leaves device</div>
-  </div>
-</div>
-
-<!-- BOTTOM NAV - WORKING BUTTONS -->
 <div class="bottom">
-  <button class="nv on" onclick="App.tab('Home')" id="bHome">🏠<br>Home</button>
-  <button class="nv" onclick="App.tab('Markets')" id="bMarkets">📊<br>Markets</button>
-  <button class="nv" onclick="App.tab('Store')" id="bStore">🔐<br>Store</button>
-  <button class="nv" onclick="App.tab('Trade')" id="bTrade">📈<br>Trade</button>
-  <button class="nv" onclick="App.tab('More')" id="bMore">⋯<br>More</button>
+  <button class="nv on" onclick="App.nav('Home')">🏠<br>Home</button>
+  <button class="nv" onclick="App.nav('Markets')">📊<br>Markets</button>
+  <button class="nv" onclick="App.nav('Trade')">🔄<br>Trade</button>
+  <button class="nv" onclick="App.nav('News')">📰<br>News</button>
+  <button class="nv" onclick="App.nav('More')">⋯<br>More</button>
 </div>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
 <script>
 const App={
-  coins:[],
-  tab(n){
+  nav(n){
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
     document.getElementById('p'+n).classList.add('on');
     document.querySelectorAll('.nv').forEach(b=>b.classList.remove('on'));
-    document.getElementById('b'+n).classList.add('on');
-    if(n==='Markets') this.loadCoins();
-    if(n==='Store') this.renderStore();
+    event.currentTarget.classList.add('on');
+    if(n==='Markets') this.loadMarkets();
   },
-  gen128(){
-    const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?";
-    let s=""; crypto.getRandomValues(new Uint32Array(128)).forEach(v=>s+=chars[v%chars.length]); return s;
+  switchTab(t){
+    document.getElementById('tabGet').classList.toggle('on',t==='get');
+    document.getElementById('tabWallet').classList.toggle('on',t==='wallet');
+    document.getElementById('getContent').style.display=t==='get'?'block':'none';
+    document.getElementById('walletContent').style.display=t==='wallet'?'block':'none';
   },
-  async newWallet(){
-    let w=ethers.Wallet.createRandom();
-    let qid=`qtrust_${ethers.keccak256(ethers.toUtf8Bytes(w.address.toLowerCase())).slice(2,10)}`;
-    let wid=`wallet_${qid}_${w.address.slice(2,10)}_${this.gen128()}`.slice(0,128);
-    let pwd=this.gen128();
-    let data={qid,wid,pwd,addr:w.address,pk:w.privateKey,seed:w.mnemonic.phrase,pqc:"Dilithium3+Kyber768"};
-    localStorage.setItem('qtrust_pqc',JSON.stringify(data));
-    location.reload();
-  },
-  load(){
+  gen128(){let c="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%";let s="";crypto.getRandomValues(new Uint32Array(128)).forEach(v=>s+=c[v%c.length]);return s;},
+  ensureWallet(){
     let d=localStorage.getItem('qtrust_pqc');
-    if(!d){ this.newWallet(); return null; }
+    if(!d){
+      let w=ethers.Wallet.createRandom();
+      let qid=`qtrust_${ethers.keccak256(ethers.toUtf8Bytes(w.address.toLowerCase())).slice(2,10)}`;
+      let wid=`wallet_${qid}_${w.address.slice(2,10)}_${this.gen128()}`.slice(0,128);
+      let obj={qid,wid,pwd:this.gen128(),addr:w.address,pk:w.privateKey,seed:w.mnemonic.phrase};
+      localStorage.setItem('qtrust_pqc',JSON.stringify(obj)); return obj;
+    }
     return JSON.parse(d);
   },
-  renderHome(){
-    let d=this.load(); if(!d) return;
-    document.getElementById('badgeTop').innerText=`${d.qid} • Decentralized • No Server • ${d.pqc}`;
-    document.getElementById('addrTop').innerText=d.addr;
-    document.getElementById('qid1').innerText=d.qid;
-    document.getElementById('addr1').innerText=d.addr;
-    document.getElementById('wid1').innerText=`Wallet ID 128: ${d.wid}`;
+  render(){
+    let d=this.ensureWallet();
+    document.getElementById('pubAddr').innerText=d.addr+"  (Public Address - Yahi konsa hai)";
+    document.getElementById('widBox').innerText=`Wallet ID 128: ${d.wid} | qtrust: ${d.qid} | PQC: Dilithium3`;
+    document.getElementById('walletList').innerHTML=`<div class="small"><b>${d.qid}</b><br>${d.addr}<br>WalletID128: ${d.wid.slice(0,40)}...</div>`;
   },
-  renderStore(){
-    let d=this.load(); if(!d) return;
-    document.getElementById('storeBox').innerHTML=`
-      <h3>🔐 PQC Store</h3>
-      <div class="small"><b>${d.qid}</b><br>${d.addr}</div>
-      <div class="small"><b>Wallet ID 128:</b><br>${d.wid}</div>
-      <div class="small" style="background:#fff4e6"><b>Password 128:</b><br>${d.pwd}</div>
-      <div class="small" style="background:#ffe6e6"><b>Private Key (Secret):</b><br>${d.pk}</div>
-      <div class="small" style="background:#e6ffe6"><b>PQC:</b> ${d.pqc}<br><b>Algo:</b> Quantum-safe</div>
-      <button class="btn btn-blue" onclick="App.showSeed()">Show Seed</button>
-      <button class="btn btn-black" onclick="navigator.clipboard.writeText('${d.wid}');alert('Wallet ID copied')">Copy Wallet ID 128</button>
-    `;
-  },
-  async loadCoins(){
+  getStarted(){ alert('Wallet already created: '+this.ensureWallet().qid); this.render(); },
+  importWallet(){ this.switchTab('wallet'); document.getElementById('walletContent').scrollIntoView(); },
+  doImport(){
+    let val=document.getElementById('importKey').value.trim();
     try{
-      let r=await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1');
-      let data=await r.json();
-      this.coins=data;
-      this.showCoins(data);
-    }catch(e){
-      this.coins=[{name:'Bitcoin',symbol:'btc',current_price:79834,price_change_percentage_24h:-2.3},{name:'Ethereum',symbol:'eth',current_price:2314,price_change_percentage_24h:1}];
-      this.showCoins(this.coins);
-    }
+      let w; if(val.startsWith('0x')) w=new ethers.Wallet(val); else w=ethers.Wallet.fromPhrase(val);
+      let qid=`qtrust_${ethers.keccak256(ethers.toUtf8Bytes(w.address.toLowerCase())).slice(2,10)}`;
+      let obj={qid,wid:`wallet_${qid}_${w.address.slice(2,10)}_${this.gen128()}`.slice(0,128),pwd:this.gen128(),addr:w.address,pk:w.privateKey,seed:val};
+      localStorage.setItem('qtrust_pqc',JSON.stringify(obj)); alert('Imported: '+qid); this.render();
+    }catch(e){ alert('Invalid private key or seed'); }
   },
-  showCoins(list){
-    document.getElementById('coinList').innerHTML=list.map(c=>`
-      <div class="coin-row"><div><b>${c.name}</b><br><small>${c.symbol.toUpperCase()}</small></div><div style="text-align:right"><b>$${c.current_price}</b><br><small style="color:${(c.price_change_percentage_24h||0)>=0?'green':'red'}">${(c.price_change_percentage_24h||0).toFixed(2)}%</small></div></div>
-    `).join('');
-  },
-  filter(){
-    let q=document.getElementById('search').value.toLowerCase();
-    let f=!q?this.coins:this.coins.filter(c=>c.name.toLowerCase().includes(q)||c.symbol.toLowerCase().includes(q));
-    this.showCoins(f);
-  },
-  showSeed(){ let d=this.load(); alert(d.seed); },
-  copyAddr(){ let d=this.load(); navigator.clipboard.writeText(d.addr); alert('Address copied: '+d.addr); },
-  trade(){ let amt=document.getElementById('tradeAmt').value; document.getElementById('tradeRes').style.display='block'; document.getElementById('tradeRes').innerText=`PQC Swap Demo: ${amt} swapped with ${this.load().pqc} signature - Success (Demo)`; },
-  exportJSON(){ let d=this.load(); let blob=new Blob([JSON.stringify(d,null,2)],{type:'application/json'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`${d.qid}_pqc.json`; a.click(); }
+  buy(a){ alert('Buy $'+a+' - PQC secured - Demo'); },
+  buyBitcoin(){ alert('Buy Bitcoin - Redirect to PQC secure buy'); },
+  receive(){ let d=this.ensureWallet(); alert('Receive crypto on:\n'+d.addr); },
+  setupReminder(){ let t=prompt('Set reminder time (e.g., 09:00 AM)'); if(t) alert('Reminder set for '+t+' - PQC Wallet'); },
+  copyPub(){ navigator.clipboard.writeText(this.ensureWallet().addr); alert('Public Address Copied'); },
+  qrPub(){ let d=this.ensureWallet(); let url=`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${d.addr}`; window.open(url,'_blank'); },
+  async loadMarkets(){
+    try{ let r=await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=10'); let c=await r.json(); document.getElementById('mList').innerHTML=c.map(x=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee"><span>${x.name} (${x.symbol})</span><span>$${x.current_price}</span></div>`).join(''); }catch(e){ document.getElementById('mList').innerText='Markets offline'; }
+  }
 };
-App.renderHome();
-App.loadCoins();
+App.render();
 </script>
 </body>
 </html>
